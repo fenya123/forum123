@@ -1,0 +1,30 @@
+# Development dependencies. Please keep this list in alphabetical order.
+
+darglint==1.8.1  # Checks whether a docstring's description matches the actual function/method implementation
+dlint==0.12.0  # Tool for encouraging best coding practices and helping ensure Python code is secure.
+flake8-absolute-import==1.0  # Plugin to require absolute imports.
+flake8-annotations==2.7.0  # Plugin for flake8 to check for presence of type annotations in function definitions.
+flake8-annotations-complexity==0.0.6  # Plugin to validate annotations complexity.
+flake8-bandit==2.0.0  # Automated security testing using bandit.
+flake8-bugbear==21.9.2  # Finding likely bugs and design problems in your program
+flake8-builtins==1.5.3  # Check for python builtins being used as variables or parameters.
+flake8-codes==0.1.1  # CLI tool to introspect flake8 plugins and their codes.
+flake8-cognitive-complexity==0.1.0  # Extension for flake8 that validates cognitive functions complexity.
+flake8-commas==2.1.0  # Enforcing trailing commas in python.
+flake8-comprehensions==3.7.0  # Helps you write better list/set/dict comprehensions.
+flake8-docstrings==1.6.0  # Include checks provided by pep257
+flake8-eradicate==1.1.0  # Plugin to find commented out or dead code.
+flake8-executable==2.1.1  # Plugin for checking executable permissions and shebangs.
+flake8-functions==0.0.6  # Plugin for validation of function parameters (length, complexity, etc).
+flake8-import-order==0.18.1  # Include checks import order against various Python Style Guides.
+flake8-mutable==1.2.0  # Extension for mutable default arguments.
+flake8-print==4.0.0  # Check for print statements in python files.
+flake8-quotes==3.3.0  # Extension for checking quotes in python.
+flake8-return==1.1.3  # Plugin that checks return values.
+flake8-rst-docstrings==0.2.3  # Validate Python docstrings as reStructuredText (RST)
+flake8-simplify==0.14.2  # Plugin that helps you to simplify code.
+flake8-spellcheck==0.24.0  # Spellcheck variables, classnames, comments, docstrings etc.
+flake8-type-checking==1.0.3  # Plugin for managing type-checking imports & forward references.
+flake8==3.9.2
+mypy==0.991
+pylint==2.15.9

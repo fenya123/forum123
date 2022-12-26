@@ -1,0 +1,99 @@
+[MAIN]
+
+load-plugins=
+    pylint.extensions.bad_builtin,  # It can be used for finding prohibited used builtins, such as map or filter, for which other alternatives exists.
+    pylint.extensions.broad_try_clause,  # Maximum number of statements allowed in a try clause.
+    pylint.extensions.check_elif,  # Used when an else statement is immediately followed by an if statement and does not contain statements that would be unrelated to it.
+    pylint.extensions.code_style,  # Checkers that can improve code consistency. As such they don't necessarily provide a performance benefit and are often times opinionated.
+    pylint.extensions.comparetozero,  # "%s" can be simplified to "%s" as 0 is falsey Used when Pylint detects comparison to a 0 constant.
+    pylint.extensions.comparison_placement,  # Used when the constant is placed on the left side of a comparison. It is usually clearer in intent to place it in the right hand side of the comparison.
+    pylint.extensions.confusing_elif,  # Used when an elif statement follows right after an indented block which itself ends with if or elif. It may not be ovious if the elif statement was willingly or mistakenly unindented.
+    pylint.extensions.consider_ternary_expression,  # Multiple assign statements spread across if/else blocks can be rewritten with a single assignment and ternary expression.
+    pylint.extensions.docparams,  # If you document the parameters of your functions, methods and constructors and their types systematically in your code this optional component might be useful for you.
+    pylint.extensions.docstyle,  # Checks bad docstring quotes and first line emptiness.
+    pylint.extensions.empty_comment,  # Used when a # symbol appears on a line not followed by an actual comment.
+    pylint.extensions.emptystring,  # Used when Pylint detects comparison to an empty string constant.
+    pylint.extensions.eq_without_hash,  # Used when a class implements __eq__ but not __hash__.
+    pylint.extensions.for_any_all,  # A for loop that checks for a condition and return a bool can be replaced with any or all.
+    pylint.extensions.mccabe,  # You can now use this plugin for finding complexity issues in your code base.
+    pylint.extensions.no_self_use,  # Used when a method doesn't use its bound instance, and so could be written as a function.
+    pylint.extensions.overlapping_exceptions,  # Used when exceptions in handler overlap or are identical.
+    pylint.extensions.private_import,  # Used when a private module or object prefixed with _ is imported.
+    pylint.extensions.redefined_loop_name,  # Used when a loop variable is overwritten in the loop body.
+    pylint.extensions.redefined_variable_type,  # Used when the type of a variable changes inside a method or a function.
+    pylint.extensions.set_membership,  # Membership tests are more efficient when performed on a lookup optimized datatype like sets.
+    pylint.extensions.typing,  # Find issue specifically related to type annotations
+    pylint.extensions.while_used,  # While loops can often be rewritten as bounded for loops.
+
+
+[BASIC]
+
+# Bad variable names which should always be refused, separated by a comma.
+bad-names=
+    bar,
+    baz,
+    f,
+    foo,
+    r,
+    u,
+    x,
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names=
+    i,
+    j,
+    k,
+    _,
+
+# Include a hint for the correct naming format with invalid-name.
+include-naming-hint=yes
+
+
+[FORMAT]
+
+# Maximum number of characters on a single line.
+max-line-length=120
+
+
+[LOGGING]
+
+# The type of string formatting that logging methods do. `old` means using %
+# formatting, `new` is for `{}` formatting.
+logging-format-style=new
+
+
+[MESSAGES CONTROL]
+
+# Enable the message, report, category or checker with the given id(s). You can
+# either give multiple identifier separated by comma (,) or put this option
+# multiple time (only on the command line, not in the configuration file where
+# it should appear only once). See also the "--disable" option for examples.
+enable=
+    useless-suppression,  # Reported when a message is explicitly disabled for a line or a block of code, but never triggered.
+
+
+[SPELLING]
+
+# List of comma separated words that should be considered directives if they
+# appear at the beginning of a comment and should not be checked.
+spelling-ignore-comment-directives=
+    mypy:,
+    noqa,
+    noqa:,
+    type,
+
+# List of comma separated words that should not be checked.
+spelling-ignore-words=
+
+
+[STRING]
+
+# This flag controls whether the implicit-str-concat should generate a warning
+# on implicit string concatenation in sequences defined over several lines.
+check-str-concat-over-line-jumps=yes
+
+
+[VARIABLES]
+
+# Tells whether unused global variables should be treated as a violation.
+allow-global-unused-variables=no
