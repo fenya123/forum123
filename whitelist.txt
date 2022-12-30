@@ -1,2 +1,8 @@
 # This is a whitelist of allowed words for flake8-spellcheck plugin.
 # IMPORTANT: please keep this list alphabetically sorted by whitelisted words
+
+# Linter
+pylint
+
+# Stands for 'source' package.
+src

@@ -34,3 +34,13 @@ There are other ways to do it correctly - choose any of these or find your own:
 5. Run `pylint src`
 
 Linters order above is the preffered way to run and fix them one by one.
+
+
+
+### Run application
+
+1. Open terminal.
+2. Depnding on your OS, type in a command 'export FLASK_APP=src' for Linux
+    or 'set ...' for Windows.
+3. Type 'flask run' command in terminal.
+4. Open http://127.0.0.1:5000 in your internet browser.
