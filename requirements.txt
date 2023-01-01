@@ -1,1 +1,3 @@
 # Project dependencies. Please keep this list in alphabetical order.
+
+flask==2.2.2
