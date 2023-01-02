@@ -2,7 +2,8 @@
 
 from flask import Flask
 
-from src.routes import bp as routes_bp
+from src import routes
+
 
 app = Flask(__name__)
-app.register_blueprint(routes_bp)
+app.register_blueprint(routes.bp)
