@@ -1,0 +1,24 @@
+on: push
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Build linters and application images
+        run: |
+          docker-compose -f envs/dev/docker-compose.yml build forum123-build
+          docker-compose -f envs/dev/docker-compose.yml build forum123-mypy
+          docker-compose -f envs/dev/docker-compose.yml build forum123-flake8
+          docker-compose -f envs/dev/docker-compose.yml build forum123-pylint
+
+      - name: Run mypy
+        run: docker-compose -f envs/dev/docker-compose.yml run forum123-mypy
+
+      - name: Run flake8
+        run: docker-compose -f envs/dev/docker-compose.yml run forum123-flake8
+
+      - name: Run pylint
+        run: docker-compose -f envs/dev/docker-compose.yml run forum123-pylint

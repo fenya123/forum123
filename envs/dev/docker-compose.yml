@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+
+  forum123-build: &forum123-build
+    build:
+      context: ../..  # path from the current file to the project root directory
+      dockerfile: envs/dev/Dockerfile  # path from the project root directory to the Dockerfile
+
+  forum123-mypy:
+    <<: *forum123-build
+    entrypoint: mypy
+
+  forum123-flake8:
+    <<: *forum123-build
+    entrypoint: flake8
+
+  forum123-pylint:
+    <<: *forum123-build
+    entrypoint: pylint src

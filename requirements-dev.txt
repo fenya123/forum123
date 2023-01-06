@@ -1,4 +1,5 @@
 # Development dependencies. Please keep this list in alphabetical order.
+# Note that mypy type stubs listed in a separate section below.
 
 darglint==1.8.1  # Checks whether a docstring's description matches the actual function/method implementation
 dlint==0.12.0  # Tool for encouraging best coding practices and helping ensure Python code is secure.
@@ -28,3 +29,8 @@ flake8-type-checking==1.0.3  # Plugin for managing type-checking imports & forwa
 flake8==3.9.2
 mypy==0.991
 pylint==2.15.9
+
+
+# Mypy types. Please keep this list in alphabetical order.
+
+types-cryptography==3.3.23.2
