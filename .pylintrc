@@ -91,9 +91,3 @@ spelling-ignore-words=
 # This flag controls whether the implicit-str-concat should generate a warning
 # on implicit string concatenation in sequences defined over several lines.
 check-str-concat-over-line-jumps=yes
-
-
-[VARIABLES]
-
-# Tells whether unused global variables should be treated as a violation.
-allow-global-unused-variables=no
