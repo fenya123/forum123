@@ -1,6 +1,11 @@
 [flake8]
 
 filename = ./src/*
+
+exclude =
+    *.html,
+    __pycache__,
+
 max-line-length = 120
 
 enable-extensions =
