@@ -1,3 +1,6 @@
 # Project dependencies. Please keep this list in alphabetical order.
 
 flask==2.2.2
+flask-WTF==1.0.1
+python-dotenv==0.21.0
+wtforms==3.0.1

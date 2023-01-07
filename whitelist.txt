@@ -1,8 +1,17 @@
 # This is a whitelist of allowed words for flake8-spellcheck plugin.
 # IMPORTANT: please keep this list alphabetically sorted by whitelisted words
 
-# Linter
+# linter
 pylint
 
-# Stands for 'source' package.
+# stands for `source` package.
 src
+
+# validators
+validators
+
+# part of the name of `flask-wtf` package
+wtf
+
+# `wtforms` python library
+wtforms
