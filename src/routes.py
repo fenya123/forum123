@@ -3,7 +3,9 @@
 from flask import Blueprint
 from flask import render_template
 
+from src.database import session
 from src.forms import RegistrationForm
+from src.models import User
 
 
 bp = Blueprint("routes", __name__)
@@ -12,8 +14,9 @@ bp = Blueprint("routes", __name__)
 @bp.route("/")
 @bp.route("/index")
 def index() -> str:
-    """Use this view function to check whether Flask is installed properly."""
-    return "Hello, wordl!"
+    """Handle index page."""
+    users = session.query(User).all()
+    return render_template("index.html", users=users)
 
 
 @bp.route("/registration")

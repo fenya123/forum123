@@ -1,11 +1,29 @@
 # This is a whitelist of allowed words for flake8-spellcheck plugin.
 # IMPORTANT: please keep this list alphabetically sorted by whitelisted words
 
+# nullable
+nullable
+
+# `ORM` stands for Object-Relational Mapping
+orm
+
+# a part of PostgreSQL name
+Postgre
+
 # linter
 pylint
 
+# sessionmaker
+sessionmaker
+
 # stands for `source` package.
 src
+
+# `sqlalchemy` is a name of a library
+sqlalchemy
+
+# a name of a database table
+tablename
 
 # validators
 validators

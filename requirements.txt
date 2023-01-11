@@ -1,6 +1,9 @@
 # Project dependencies. Please keep this list in alphabetical order.
 
+alembic[tz]==1.9.1
 flask==2.2.2
 flask-WTF==1.0.1
 python-dotenv==0.21.0
+psycopg2-binary==2.9.5
+sqlalchemy==1.4.46
 wtforms==3.0.1
