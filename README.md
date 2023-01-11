@@ -2,7 +2,7 @@
 
 ## Development setup
 
-__This project requires Python 3.10.__
+__This project requires Python 3.10, Docker, Docker Compose.__
 
 
 
@@ -40,7 +40,17 @@ Linters order above is the preffered way to run and fix them one by one.
 ### Run application
 
 1. Open terminal.
-2. Depending on your OS, type in a command `export FLASK_APP=src` for Linux
-    or `set ...` for Windows.
-3. Type `flask run` command in terminal.
-4. Open http://127.0.0.1:5000 in your internet browser.
+2. Run services using `docker-compose -f envs/dev/docker-compose.yml up --detach` command.
+3. Apply recent migrations if you haven't done it yet using `alembic upgrade head` command.
+4. Type `flask run` command in terminal.
+5. Open http://127.0.0.1:5000 in your internet browser.
+
+
+
+### Working with migrations
+
+- Autogenerate migrations by typing command `alembic revision --autogenerate -m "<your message>"`.
+- To apply migrations, use `alembic upgrade <revision>` if you want to have a certain revision
+    or `alembic upgrade head` if you want to apply all available migrations.
+- To revert migrations, use `alembic downgrade <revision>`
+    or `alembic downgrade -1` to revert last migration.

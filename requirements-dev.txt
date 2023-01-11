@@ -29,6 +29,7 @@ flake8-type-checking==1.0.3  # Plugin for managing type-checking imports & forwa
 flake8==3.9.2
 mypy==0.991
 pylint==2.15.9
+sqlalchemy[mypy]==1.4.46
 
 
 # Mypy types. Please keep this list in alphabetical order.

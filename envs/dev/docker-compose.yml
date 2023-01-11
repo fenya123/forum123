@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  forum123-db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 127.0.0.1:5432:5432
+    volumes:
+      - forum123-db:/var/lib/postgresql/data
+
+volumes:
+  forum123-db:
+    name: forum123-db
