@@ -19,8 +19,13 @@ def index() -> str:
     return render_template("index.html", users=users)
 
 
-@bp.route("/registration")
+@bp.route("/registration", methods=["POST", "GET"])
 def registration() -> str:
     """Handle user's registration form."""
     form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data)
+        user.set_password(form.password.data)
+        session.add(user)
+        session.commit()
     return render_template("registration.html", form=form)
