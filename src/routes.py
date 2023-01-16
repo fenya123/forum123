@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import render_template
 
 from src.database import session
-from src.forms import RegistrationForm
+from src.forms import LoginForm, RegistrationForm
 from src.models import User
 
 
@@ -29,3 +29,10 @@ def registration() -> str:
         session.add(user)
         session.commit()
     return render_template("registration.html", form=form)
+
+
+@bp.route("/login")
+def login() -> str:
+    """Handle user's login form."""
+    form = LoginForm()
+    return render_template("login.html", form=form)
