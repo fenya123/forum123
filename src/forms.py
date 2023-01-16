@@ -11,3 +11,11 @@ class RegistrationForm(FlaskForm):  # type: ignore
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Sign Up")
+
+
+class LoginForm(FlaskForm):  # type: ignore
+    """A class for a login form."""
+
+    username = StringField("Username", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    submit = SubmitField("Sign In")
