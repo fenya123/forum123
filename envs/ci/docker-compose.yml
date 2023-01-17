@@ -6,6 +6,10 @@ services:
     build:
       context: ../..  # path from the current file to the project root directory
       dockerfile: envs/ci/Dockerfile  # path from the project root directory to the Dockerfile
+      cache_from:
+        - type=local,src=${BUILDX_CACHE_SRC}
+      cache_to:
+        - type=local,dest=${BUILDX_CACHE_DEST}
 
   forum123-mypy:
     <<: *forum123-build
