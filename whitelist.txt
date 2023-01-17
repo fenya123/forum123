@@ -28,6 +28,9 @@ tablename
 # validators
 validators
 
+# a name of a library
+werkzeug
+
 # part of the name of `flask-wtf` package
 wtf
 
