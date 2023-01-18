@@ -12,8 +12,8 @@ COPY requirements.txt requirements-dev.txt ./
 
 RUN apt-get update \
     && pip install --upgrade pip \
-    && pip install -r requirements.txt \
-                   -r requirements-dev.txt
+    && pip install --no-cache-dir -r requirements.txt \
+                                  -r requirements-dev.txt
 
 COPY . ./
 
