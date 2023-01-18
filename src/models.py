@@ -2,7 +2,7 @@
 
 import hashlib
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 from src.database import Base
 
@@ -26,3 +26,13 @@ class User(Base):
     def check_password(self, password_to_check: str) -> bool:
         """Use this method to check User's password."""
         return self._get_password_hash(password_to_check) == self.password_hash
+
+
+class UserSession(Base):  # pylint: disable=too-few-public-methods
+    """A model class for user_session table."""
+
+    __tablename__ = "user_session"
+
+    id = Column(Integer, primary_key=True)  # noqa: A003
+    session_id = Column(String, nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
