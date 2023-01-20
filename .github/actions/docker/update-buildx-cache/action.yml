@@ -1,0 +1,16 @@
+# This ugly but it's necessary if you don't want your cache to grow forever
+# until it hits GitHub's limit of 5GB. Because `cache_to` option does not
+# update the entire Docker cache, but just adds some new layers.
+# This is a temporary fix. You can read more about this problem here:
+# https://github.com/docker/build-push-action/issues/252
+# https://github.com/moby/buildkit/issues/1896
+
+runs:
+  using: composite
+  steps:
+    - name: Update buildx cache
+      shell: bash
+      run: |
+        set -o allexport; source envs/ci/.env; set +o allexport;  # export environment variables from dotenv file
+        rm -rf ${BUILDX_CACHE_SRC}
+        mv ${BUILDX_CACHE_DEST} ${BUILDX_CACHE_SRC}
