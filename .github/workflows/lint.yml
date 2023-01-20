@@ -1,0 +1,61 @@
+name: Lint
+run-name: Lint commit "${{ github.event.head_commit.message }}"
+
+on: push
+jobs:
+  mypy:
+    name: Mypy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Cache Docker layers
+        uses: ./.github/actions/docker/use-buildx-cache
+
+      - name: Build mypy
+        run: docker compose -f envs/ci/docker-compose.yml --env-file envs/ci/.env build forum123-mypy
+
+      - name: Run mypy
+        run: docker compose -f envs/ci/docker-compose.yml --env-file envs/ci/.env run forum123-mypy
+
+      - name: Update buildx cache
+        uses: ./.github/actions/docker/update-buildx-cache
+
+  flake8:
+    name: Flake8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Cache Docker layers
+        uses: ./.github/actions/docker/use-buildx-cache
+
+      - name: Build flake8
+        run: docker compose -f envs/ci/docker-compose.yml --env-file envs/ci/.env build forum123-flake8
+
+      - name: Run flake8
+        run: docker compose -f envs/ci/docker-compose.yml --env-file envs/ci/.env run forum123-flake8
+
+      - name: Update buildx cache
+        uses: ./.github/actions/docker/update-buildx-cache
+
+  pylint:
+    name: Pylint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Cache Docker layers
+        uses: ./.github/actions/docker/use-buildx-cache
+
+      - name: Build pylint
+        run: docker compose -f envs/ci/docker-compose.yml --env-file envs/ci/.env build forum123-pylint
+
+      - name: Run pylint
+        run: docker compose -f envs/ci/docker-compose.yml --env-file envs/ci/.env run forum123-pylint
+
+      - name: Update buildx cache
+        uses: ./.github/actions/docker/update-buildx-cache
