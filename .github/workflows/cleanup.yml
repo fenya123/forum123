@@ -1,0 +1,66 @@
+name: Cleanup
+run-name: Cleanup branch "${{ github.event.ref }}"
+
+on:
+  delete:  # runs when a git branch or tag is deleted
+  push:  # runs when a git branch or tag is pushed
+    branches-ignore:
+      # we don't want to run cleaning up for these branches, because we expect them to never be force pushed
+      - develop
+jobs:
+  cleanup-on-delete:
+    # This job is used to remove old workflow runs which remained after deleteing a branch.
+    # More info about why we need this you can read in the according python script we run here.`
+    if: github.event_name == 'delete' && github.event.ref_type == 'branch'
+    name: On delete
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out whole repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all history for all branches and tags
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"  # caching pip dependencies
+
+      - name: Install dependencies
+        run: pip install -r envs/ci/scripts/github/requirements.txt
+
+      - name: Clean up workflow runs for deleted branch
+        env:
+          GITHUB_EVENT_REF: ${{ github.event.ref }}  # we use `github.event.ref` here because `vars.GITHUB_REF_NAME`
+                                                     # for deleted branch will point to default branch
+          GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python envs/ci/scripts/github/cleanup_runs_for_deleted_branch.py
+
+  cleanup-on-force-push:
+    # This job is used to remove old workflow runs which remained after force pushing a branch.
+    # More info about why we need this you can read in the according python script we run here.
+    if: github.event_name == 'push' && github.event.forced
+    name: On force push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out whole repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all history for all branches and tags
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"  # caching pip dependencies
+
+      - name: Install dependencies
+        run: pip install -r envs/ci/scripts/github/requirements.txt
+
+      - name: Clean up workflow runs for current branch after rebase
+        env:
+          GITHUB_REF_NAME: ${{ vars.GITHUB_REF_NAME }}
+          GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python envs/ci/scripts/github/cleanup_runs_for_rebased_branch.py
