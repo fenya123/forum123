@@ -13,6 +13,9 @@ services:
 
   forum123-mypy:
     <<: *forum123-build
+    volumes:
+      # bind .mypy_cache to the host in order to store mypy cache in GitHub Cache
+      - ../../.mypy_cache:/forum123/.mypy_cache  # host path is relative to the current docker-compose file
     entrypoint: mypy
 
   forum123-flake8:
@@ -21,4 +24,4 @@ services:
 
   forum123-pylint:
     <<: *forum123-build
-    entrypoint: pylint src
+    entrypoint: pylint --jobs=0 src
