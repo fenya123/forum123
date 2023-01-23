@@ -1,5 +1,9 @@
 # Forum123 backend
 
+![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/birthdaysgift/daf93d417057585c270ed982ea89fa5d/raw/mypy.json)
+![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/birthdaysgift/daf93d417057585c270ed982ea89fa5d/raw/flake8.json)
+![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/birthdaysgift/daf93d417057585c270ed982ea89fa5d/raw/pylint.json)
+
 ## Development setup
 
 __This project requires Python 3.10, Docker, Docker Compose.__

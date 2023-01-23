@@ -31,6 +31,22 @@ jobs:
       - name: Update buildx cache
         uses: ./.github/actions/docker/update-buildx-cache
 
+  mypy-badge:
+    name: Mypy badge
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [mypy]
+    steps:
+      - name: Create mypy badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.FORUM123_BADGES_GIST_SECRET }}
+          gistID: daf93d417057585c270ed982ea89fa5d
+          filename: mypy.json
+          label: mypy
+          message: ${{ needs.mypy.result == 'success' && 'passing' || 'failure' }}
+          color: ${{ needs.mypy.result == 'success' && '#238636' || '#6b2a2b' }}
+
   flake8:
     name: Flake8
     runs-on: ubuntu-latest
@@ -50,6 +66,22 @@ jobs:
       - name: Update buildx cache
         uses: ./.github/actions/docker/update-buildx-cache
 
+  flake8-badge:
+    name: Flake8 badge
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [flake8]
+    steps:
+      - name: Create flake8 badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.FORUM123_BADGES_GIST_SECRET }}
+          gistID: daf93d417057585c270ed982ea89fa5d
+          filename: flake8.json
+          label: flake8
+          message: ${{ needs.flake8.result == 'success' && 'passing' || 'failure' }}
+          color: ${{ needs.flake8.result == 'success' && '#238636' || '#6b2a2b' }}
+
   pylint:
     name: Pylint
     runs-on: ubuntu-latest
@@ -68,3 +100,19 @@ jobs:
 
       - name: Update buildx cache
         uses: ./.github/actions/docker/update-buildx-cache
+
+  pylint-badge:
+    name: Pylint badge
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [pylint]
+    steps:
+      - name: Create pylint badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.FORUM123_BADGES_GIST_SECRET }}
+          gistID: daf93d417057585c270ed982ea89fa5d
+          filename: pylint.json
+          label: pylint
+          message: ${{ needs.pylint.result == 'success' && 'passing' || 'failure' }}
+          color: ${{ needs.pylint.result == 'success' && '#238636' || '#6b2a2b' }}
