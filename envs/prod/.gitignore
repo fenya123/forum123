@@ -1,0 +1,2 @@
+# prevent production environment variables to be commited to the repository
+.env

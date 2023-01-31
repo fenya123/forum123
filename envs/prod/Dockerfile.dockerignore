@@ -1,0 +1,15 @@
+# This .dockerignore file works for build context of a Dockerfile placed in the same directory.
+
+# All paths in this file is relative to the build content provided in associated docker-compose.yml.
+# See "build:context" section.
+
+# Please keep this list in alphabetical order.
+
+__pycache__
+
+.mypy_cache
+
+.pytest_cache
+
+# prevent production environment variables to be in image pushed to public docker repository
+envs/prod/.env
