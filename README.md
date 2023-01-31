@@ -3,6 +3,7 @@
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/birthdaysgift/daf93d417057585c270ed982ea89fa5d/raw/mypy.json)
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/birthdaysgift/daf93d417057585c270ed982ea89fa5d/raw/flake8.json)
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/birthdaysgift/daf93d417057585c270ed982ea89fa5d/raw/pylint.json)
+![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/birthdaysgift/daf93d417057585c270ed982ea89fa5d/raw/deploy.json)
 
 ## Development setup
 

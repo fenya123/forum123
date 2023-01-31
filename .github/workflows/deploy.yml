@@ -31,3 +31,19 @@ jobs:
             git branch -D tmp-branch
 
             docker compose -f envs/prod/docker-compose.yml up --build --detach
+
+  deploy-badge:
+    name: Deploy badge
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [deploy]
+    steps:
+      - name: Create deploy badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.FORUM123_BADGES_GIST_SECRET }}
+          gistID: daf93d417057585c270ed982ea89fa5d
+          filename: deploy.json
+          label: deploy
+          message: ${{ needs.deploy.result == 'success' && 'passing' || 'failure' }}
+          color: ${{ needs.deploy.result == 'success' && '#238636' || '#6b2a2b' }}
