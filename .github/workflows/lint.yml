@@ -116,3 +116,18 @@ jobs:
           label: pylint
           message: ${{ needs.pylint.result == 'success' && 'passing' || 'failure' }}
           color: ${{ needs.pylint.result == 'success' && '#238636' || '#6b2a2b' }}
+
+  branch:
+    name: Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out whole repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all history for all branches and tags
+
+      - name: Lint branch
+        env:
+          GITHUB_CURRENT_BRANCH: ${{ github.ref_name }}
+          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: python envs/ci/scripts/branches/lint.py
