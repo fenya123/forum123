@@ -1,6 +1,12 @@
 # This is a whitelist of allowed words for flake8-spellcheck plugin.
 # IMPORTANT: please keep this list alphabetically sorted by whitelisted words
 
+# SQLAlchemy method - short for `descending`
+desc
+
+# short for `function`
+func
+
 # nullable
 nullable
 
@@ -27,6 +33,9 @@ sqlalchemy
 
 # a name of a database table
 tablename
+
+# SQLAlchemy parameter name
+uselist
 
 # validators
 validators

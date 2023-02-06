@@ -2,7 +2,8 @@
 
 import hashlib
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, DateTime, ForeignKey, func, Integer, String
+from sqlalchemy.orm import relationship
 
 from src.database import Base
 
@@ -36,3 +37,16 @@ class UserSession(Base):  # pylint: disable=too-few-public-methods
     id = Column(Integer, primary_key=True)  # noqa: A003
     session_id = Column(String, nullable=False, unique=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+
+class Topic(Base):  # pylint: disable=too-few-public-methods
+    """A model class for topics table."""
+
+    __tablename__ = "topics"
+
+    id = Column(Integer, primary_key=True)  # noqa: A003
+    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    description = Column(String(123), nullable=False)
+    title = Column(String(30), nullable=False)
+    author: User = relationship("User", uselist=False)
