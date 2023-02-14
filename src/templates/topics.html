@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for topic in topic_list %}
+        <ul>
+            <li><b>{{ topic.title }}</b></li>
+            <li>{{ topic.description }}</li>
+            <li>{{ topic.author.username }}</li>
+            <li>at {{ topic.created_at }}</li>
+        </ul>
+    {% endfor %}
+{% endblock %}
