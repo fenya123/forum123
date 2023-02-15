@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h1><a href="{{ url_for('routes.create_topic') }}">Create topic</a></h1>
     {% for topic in topic_list %}
+    <br>
         <ul>
             <li><b>{{ topic.title }}</b></li>
             <li>{{ topic.description }}</li>

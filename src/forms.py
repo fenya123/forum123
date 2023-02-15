@@ -1,7 +1,7 @@
 """forum123's forms module."""
 
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField
+from wtforms import PasswordField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
 
@@ -19,3 +19,11 @@ class LoginForm(FlaskForm):  # type: ignore
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Sign In")
+
+
+class TopicForm(FlaskForm):  # type: ignore
+    """A class for a topic creation form."""
+
+    title = TextAreaField("Title", validators=[DataRequired()])
+    description = TextAreaField("Description", validators=[DataRequired()])
+    submit = SubmitField("Create topic")
