@@ -105,3 +105,17 @@ def create_topic() -> str | Response:
             return redirect(url_for("routes.topics"))
         return render_template("topics-create.html", form=form, current_user=current_user)
     return redirect(url_for("routes.login"))
+
+
+@bp.route("/topics/<int:topic_id>")
+def topic_page(topic_id: int) -> str | Response:
+    """Handle topic page."""
+    session_id = request.cookies.get("session_id")
+    user_session = session.query(UserSession).filter_by(session_id=session_id).first()
+
+    current_user = None
+    if user_session is not None:
+        current_user = session.query(User).filter_by(id=user_session.user_id).one()
+        topic = session.query(Topic).filter_by(id=topic_id).first()
+        return render_template("topic.html", current_user=current_user, topic=topic)
+    return redirect(url_for("routes.login"))

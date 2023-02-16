@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <b><p>{{ topic.author.username }} says:</p></b>
+    <br>
+    <h1>{{ topic.title }}</h1>
+    <br>
+    <p>{{ topic.description }}</p>
+    <br>
+    <p>{{ topic.created_at }}</p>
+{% endblock %}

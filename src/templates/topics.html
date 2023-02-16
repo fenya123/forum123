@@ -5,7 +5,7 @@
     {% for topic in topic_list %}
     <br>
         <ul>
-            <li><b>{{ topic.title }}</b></li>
+            <li><b><a href="{{ url_for('routes.topic_page', topic_id=topic.id) }}">{{ topic.title }}</a></b></li>
             <li>{{ topic.description }}</li>
             <li>{{ topic.author.username }}</li>
             <li>at {{ topic.created_at }}</li>
