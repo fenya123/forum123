@@ -88,8 +88,8 @@ def topics() -> str | Response:
     return redirect(url_for("routes.login"))
 
 
-@bp.route("/topics/create")
-def create_topic() -> str:
+@bp.route("/topics/create", methods=["POST", "GET"])
+def create_topic() -> str | Response:
     """Handle create topic page."""
     session_id = request.cookies.get("session_id")
     user_session = session.query(UserSession).filter_by(session_id=session_id).first()
@@ -97,6 +97,11 @@ def create_topic() -> str:
     current_user = None
     if user_session is not None:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
-
-    form = TopicForm()
-    return render_template("topics-create.html", form=form, current_user=current_user)
+        form = TopicForm()
+        if form.validate_on_submit():
+            new_topic = Topic(title=form.title.data, description=form.description.data, author_id=current_user.id)
+            session.add(new_topic)
+            session.commit()
+            return redirect(url_for("routes.topics"))
+        return render_template("topics-create.html", form=form, current_user=current_user)
+    return redirect(url_for("routes.login"))
