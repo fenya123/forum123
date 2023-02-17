@@ -10,7 +10,7 @@ from flask import make_response, redirect, render_template, request, url_for
 
 from src.database import session
 from src.forms import LoginForm, PostForm, RegistrationForm, TopicForm
-from src.models import Topic, User, UserSession
+from src.models import Post, Topic, User, UserSession
 
 if TYPE_CHECKING:
     from werkzeug.wrappers.response import Response
@@ -132,5 +132,10 @@ def create_post(topic_id: int) -> str | Response:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
         form = PostForm()
         topic = session.query(Topic).filter_by(id=topic_id).first()
+        if topic and form.validate_on_submit():
+            new_post = Post(body=form.body.data, author_id=current_user.id, topic_id=topic.id)
+            session.add(new_post)
+            session.commit()
+            return redirect(url_for("routes.topic_page", topic_id=topic.id))
         return render_template("posts-create.html", form=form, topic=topic, current_user=current_user)
     return redirect(url_for("routes.login"))
