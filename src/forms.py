@@ -27,3 +27,10 @@ class TopicForm(FlaskForm):  # type: ignore
     title = TextAreaField("Title", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
     submit = SubmitField("Create topic")
+
+
+class PostForm(FlaskForm):  # type: ignore
+    """A class for a post creation form."""
+
+    body = TextAreaField("Body", validators=[DataRequired()])
+    submit = SubmitField("Create post")
