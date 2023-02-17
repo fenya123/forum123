@@ -9,7 +9,7 @@ from flask import Blueprint
 from flask import make_response, redirect, render_template, request, url_for
 
 from src.database import session
-from src.forms import LoginForm, RegistrationForm, TopicForm
+from src.forms import LoginForm, PostForm, RegistrationForm, TopicForm
 from src.models import Topic, User, UserSession
 
 if TYPE_CHECKING:
@@ -118,4 +118,19 @@ def topic_page(topic_id: int) -> str | Response:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
         topic = session.query(Topic).filter_by(id=topic_id).first()
         return render_template("topic.html", current_user=current_user, topic=topic)
+    return redirect(url_for("routes.login"))
+
+
+@bp.route("/topics/<int:topic_id>/posts/create", methods=["POST", "GET"])
+def create_post(topic_id: int) -> str | Response:
+    """Handle post creation page."""
+    session_id = request.cookies.get("session_id")
+    user_session = session.query(UserSession).filter_by(session_id=session_id).first()
+
+    current_user = None
+    if user_session is not None:
+        current_user = session.query(User).filter_by(id=user_session.user_id).one()
+        form = PostForm()
+        topic = session.query(Topic).filter_by(id=topic_id).first()
+        return render_template("posts-create.html", form=form, topic=topic, current_user=current_user)
     return redirect(url_for("routes.login"))

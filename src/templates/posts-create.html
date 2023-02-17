@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Create post</h1>
+    <form id="1" method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.body.label }}<br>
+            {{ form.body(size=123) }}
+        </p>
+        <p>{{ form.submit() }}</p><button form="1" type="reset"><a href="{{ url_for('routes.topic_page', topic_id=topic.id) }}">Cancel</a></button>
+    </form>
+{% endblock %}
