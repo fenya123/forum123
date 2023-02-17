@@ -8,4 +8,13 @@
     <p>{{ topic.description }}</p>
     <br>
     <p>{{ topic.created_at }}</p>
+    <br>
+    <h2><b>Posts:</b></h2>
+    {% for post in topic.posts %}
+        <ul>
+            <li>{{ post.author.username }} said:</li>
+            <li>{{ post.body }}</li>
+            <li>at {{ post.created_at }}</li>
+        </ul>
+    {% endfor %}
 {% endblock %}

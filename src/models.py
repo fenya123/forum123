@@ -1,5 +1,7 @@
 """forum123's database models module."""
 
+from __future__ import annotations
+
 import hashlib
 
 from sqlalchemy import Column, DateTime, ForeignKey, func, Integer, String
@@ -49,4 +51,18 @@ class Topic(Base):  # pylint: disable=too-few-public-methods
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     description = Column(String(123), nullable=False)
     title = Column(String(30), nullable=False)
+    author: User = relationship("User", uselist=False)
+    posts: list[Post] = relationship("Post", order_by="Post.created_at")
+
+
+class Post(Base):  # pylint: disable=too-few-public-methods
+    """A model class for posts table."""
+
+    __tablename__ = "posts"
+
+    id = Column(Integer, primary_key=True)  # noqa: A003
+    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    body = Column(String(123), nullable=False)
+    topic_id = Column(Integer, ForeignKey("topics.id"), nullable=False)
     author: User = relationship("User", uselist=False)
