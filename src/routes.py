@@ -117,6 +117,8 @@ def topic_page(topic_id: int) -> str | Response:
     if user_session is not None:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
         topic = session.query(Topic).filter_by(id=topic_id).first()
+        if not topic:
+            return render_template("404.html", current_user=current_user)
         return render_template("topic.html", current_user=current_user, topic=topic)
     return redirect(url_for("routes.login"))
 
@@ -132,7 +134,9 @@ def create_post(topic_id: int) -> str | Response:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
         form = PostForm()
         topic = session.query(Topic).filter_by(id=topic_id).first()
-        if topic and form.validate_on_submit():
+        if not topic:
+            return render_template("404.html", current_user=current_user)
+        elif topic and form.validate_on_submit():
             new_post = Post(body=form.body.data, author_id=current_user.id, topic_id=topic.id)
             session.add(new_post)
             session.commit()
