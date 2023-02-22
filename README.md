@@ -51,6 +51,14 @@ Linters order above is the preffered way to run and fix them one by one.
 5. Open http://127.0.0.1:5000 in your internet browser.
 
 
+### Run tests
+
+1. Open terminal
+2. Run services using `docker-compose -f envs/test/docker-compose.yml up --detach` command.
+3. Type `pytest` command in terminal.
+   If you want to check coverage, run `pytest --cov=src`. This command also creates `htmlcov/index.html` file,
+   which you can open in your browser and look at the html report.
+
 
 ### Working with migrations
 

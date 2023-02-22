@@ -3,6 +3,7 @@
 
 darglint==1.8.1  # Checks whether a docstring's description matches the actual function/method implementation
 dlint==0.12.0  # Tool for encouraging best coding practices and helping ensure Python code is secure.
+flake8-aaa==0.12.2  # Lints tests against the Arrange Act Assert pattern.
 flake8-absolute-import==1.0  # Plugin to require absolute imports.
 flake8-annotations==2.7.0  # Plugin for flake8 to check for presence of type annotations in function definitions.
 flake8-annotations-complexity==0.0.6  # Plugin to validate annotations complexity.
@@ -29,6 +30,8 @@ flake8-type-checking==1.0.3  # Plugin for managing type-checking imports & forwa
 flake8==3.9.2
 mypy==0.991
 pylint==2.15.9
+pytest==7.2.0
+pytest-cov==4.0.0
 sqlalchemy[mypy]==1.4.46
 
 

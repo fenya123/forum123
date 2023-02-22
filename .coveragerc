@@ -1,0 +1,16 @@
+[run]
+branch = True
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+
+
+show_missing = True
+
+skip_covered = True
+skip_empty = True
+
+[html]
+show_contexts = True

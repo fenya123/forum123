@@ -11,7 +11,7 @@ app.register_blueprint(routes.bp)
 app.config.from_object(Config)
 
 
-if Config.PROXIES:
+if Config.PROXIES:  # pragma: no cover
     # flask app has to know that it's behind a proxy
     # see: https://flask.palletsprojects.com/en/2.2.x/deploying/proxy_fix/
     app.wsgi_app = ProxyFix(  # type: ignore

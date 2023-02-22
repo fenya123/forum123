@@ -1,6 +1,8 @@
 [flake8]
 
-filename = ./src/*
+filename =
+    ./src/*,
+    ./tests/*,
 
 exclude =
     *.html,
@@ -20,6 +22,28 @@ ignore =
     S101,  # Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
     W503,  # Line break occurred before a binary operator.
 
+per-file-ignores =
+    # files with tests
+    tests/*test_*:
+        # Absence of function annotations and type comments
+        ANN,
+        # Missing docstring
+        D,
+        # local variable {variable} is assigned to but never used
+        F841,
+
+     # files with fixtures
+    tests/*conftest.py:
+        # Absence of function annotations and type comments
+        ANN,
+        # Missing docstring
+        D,
+
+    # files with unit-testing utilities
+    tests/utils/*:
+        # Absence of function annotations and type comments
+        ANN,
+
 # NEXT WILL BE LISTED SOME OPTIONS USED BY PLUGINS
 # PLEASE KEEP THIS LIST SORTED BY PLUGIN NAMES ALPHABETICALLY
 
@@ -31,7 +55,7 @@ docstring_style = sphinx
 strictness = short
 
 # flake8-import-order ==================================================================================================
-application-import-names = src
+application-import-names = src,tests
 # Controls what style the plugin follows.
 import-order-style = smarkets
 
