@@ -116,13 +116,14 @@ def topic_page(topic_id: int) -> str | Response:
     current_user = None
     if user_session is not None:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
-        topic = session.query(Topic).filter_by(id=topic_id).first()
+        if not (topic := session.query(Topic).filter_by(id=topic_id).first()):
+            return render_template("404.html", current_user=current_user)
         return render_template("topic.html", current_user=current_user, topic=topic)
     return redirect(url_for("routes.login"))
 
 
 @bp.route("/topics/<int:topic_id>/posts/create", methods=["POST", "GET"])
-def create_post(topic_id: int) -> str | Response:
+def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
     """Handle post creation page."""
     session_id = request.cookies.get("session_id")
     user_session = session.query(UserSession).filter_by(session_id=session_id).first()
@@ -131,7 +132,8 @@ def create_post(topic_id: int) -> str | Response:
     if user_session is not None:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
         form = PostForm()
-        topic = session.query(Topic).filter_by(id=topic_id).first()
+        if not (topic := session.query(Topic).filter_by(id=topic_id).first()):
+            return render_template("404.html", current_user=current_user)
         if topic and form.validate_on_submit():
             new_post = Post(body=form.body.data, author_id=current_user.id, topic_id=topic.id)
             session.add(new_post)
