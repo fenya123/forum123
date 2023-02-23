@@ -1,6 +1,12 @@
 # This is a whitelist of allowed words for flake8-spellcheck plugin.
 # IMPORTANT: please keep this list alphabetically sorted by whitelisted words
 
+# auto increment
+autoincrement
+
+# context variables (python standard library)
+contextvars
+
 # SQLAlchemy method - short for `descending`
 desc
 
@@ -25,6 +31,9 @@ pylint
 # sessionmaker
 sessionmaker
 
+# session start (used in `pytest`)
+sessionstart
+
 # stands for `source` package.
 src
 
@@ -34,8 +43,14 @@ sqlalchemy
 # a name of a database table
 tablename
 
+# unit-test (used by python standard library)
+unittest
+
 # SQLAlchemy parameter name
 uselist
+
+# utilities
+utils
 
 # validators
 validators

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from flask import Blueprint
 from flask import make_response, redirect, render_template, request, url_for
 
-from src.database import session
+from src.database import session_var
 from src.forms import LoginForm, PostForm, RegistrationForm, TopicForm
 from src.models import Post, Topic, User, UserSession
 
@@ -19,10 +19,20 @@ if TYPE_CHECKING:
 bp = Blueprint("routes", __name__)
 
 
+@bp.route("/check-unit-tests", methods=["POST"])
+def check_unit_tests() -> str:
+    """Route to check that application works correctly in unit-testing environment."""
+    session = session_var.get()
+    session.add(User(username="user from app", password_hash="password"))
+    session.commit()
+    return render_template("user_created.html")
+
+
 @bp.route("/")
 @bp.route("/index")
 def index() -> str:
     """Handle index page."""
+    session = session_var.get()
     users = session.query(User).all()
     session_id = request.cookies.get("session_id")
     user_session = session.query(UserSession).filter_by(session_id=session_id).first()
@@ -37,6 +47,7 @@ def index() -> str:
 @bp.route("/registration", methods=["POST", "GET"])
 def registration() -> str:
     """Handle user's registration form."""
+    session = session_var.get()
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data)
@@ -49,6 +60,7 @@ def registration() -> str:
 @bp.route("/login", methods=["POST", "GET"])
 def login() -> str | Response:
     """Handle user's login form."""
+    session = session_var.get()
     form = LoginForm()
     if form.validate_on_submit():
         user = session.query(User).filter_by(username=form.username.data).first()
@@ -67,6 +79,7 @@ def login() -> str | Response:
 @bp.route("/logout")
 def logout() -> Response:
     """Log out users."""
+    session = session_var.get()
     session_id = request.cookies.get("session_id")
     if session_to_delete := session.query(UserSession).filter_by(session_id=session_id).first():
         session.delete(session_to_delete)
@@ -77,6 +90,7 @@ def logout() -> Response:
 @bp.route("/topics")
 def topics() -> str | Response:
     """Handle topics page."""
+    session = session_var.get()
     session_id = request.cookies.get("session_id")
     user_session = session.query(UserSession).filter_by(session_id=session_id).first()
 
@@ -91,6 +105,7 @@ def topics() -> str | Response:
 @bp.route("/topics/create", methods=["POST", "GET"])
 def create_topic() -> str | Response:
     """Handle create topic page."""
+    session = session_var.get()
     session_id = request.cookies.get("session_id")
     user_session = session.query(UserSession).filter_by(session_id=session_id).first()
 
@@ -110,6 +125,7 @@ def create_topic() -> str | Response:
 @bp.route("/topics/<int:topic_id>")
 def topic_page(topic_id: int) -> str | Response:
     """Handle topic page."""
+    session = session_var.get()
     session_id = request.cookies.get("session_id")
     user_session = session.query(UserSession).filter_by(session_id=session_id).first()
 
@@ -125,6 +141,7 @@ def topic_page(topic_id: int) -> str | Response:
 @bp.route("/topics/<int:topic_id>/posts/create", methods=["POST", "GET"])
 def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
     """Handle post creation page."""
+    session = session_var.get()
     session_id = request.cookies.get("session_id")
     user_session = session.query(UserSession).filter_by(session_id=session_id).first()
 
