@@ -45,7 +45,7 @@ def index() -> str:
 
 
 @bp.route("/registration", methods=["POST", "GET"])
-def registration() -> str:
+def registration() -> str | Response:
     """Handle user's registration form."""
     session = session_var.get()
     form = RegistrationForm()
@@ -54,6 +54,7 @@ def registration() -> str:
         user.set_password(form.password.data)
         session.add(user)
         session.commit()
+        return redirect(url_for("routes.index"))
     return render_template("registration.html", form=form)
 
 
