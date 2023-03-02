@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import hashlib
+import uuid
 
 from sqlalchemy import Column, DateTime, ForeignKey, func, Integer, String
 from sqlalchemy.orm import relationship
 
-from src.database import Base
+from src.database import Base, session_var
 
 
 class User(Base):
@@ -30,6 +31,22 @@ class User(Base):
         """Use this method to check User's password."""
         return self._get_password_hash(password_to_check) == self.password_hash
 
+    @classmethod
+    def create_user(cls, username: str, password: str) -> None:
+        """Use this method to create a new user."""
+        new_user = cls(username=username, password_hash=hashlib.sha256(password.encode()).hexdigest())
+        session = session_var.get()
+        session.add(new_user)
+        session.commit()
+
+    def create_session(self) -> UserSession:
+        """Use this method to create a new session."""
+        new_session = UserSession(session_id=str(uuid.uuid4()), user_id=self.id)
+        session = session_var.get()
+        session.add(new_session)
+        session.commit()
+        return new_session
+
 
 class UserSession(Base):  # pylint: disable=too-few-public-methods
     """A model class for user_session table."""
@@ -41,7 +58,7 @@ class UserSession(Base):  # pylint: disable=too-few-public-methods
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
 
-class Topic(Base):  # pylint: disable=too-few-public-methods
+class Topic(Base):
     """A model class for topics table."""
 
     __tablename__ = "topics"
@@ -53,6 +70,21 @@ class Topic(Base):  # pylint: disable=too-few-public-methods
     title = Column(String(30), nullable=False)
     author: User = relationship("User", uselist=False)
     posts: list[Post] = relationship("Post", order_by="Post.created_at")
+
+    @classmethod
+    def create_topic(cls, title: str, description: str, author_id: int) -> None:
+        """Use this method to create a new topic."""
+        new_topic = cls(title=title, description=description, author_id=author_id)
+        session = session_var.get()
+        session.add(new_topic)
+        session.commit()
+
+    def create_post(self, body: str, author_id: int) -> None:
+        """Use this method to create a new post."""
+        new_post = Post(body=body, author_id=author_id, topic_id=self.id)
+        session = session_var.get()
+        session.add(new_post)
+        session.commit()
 
 
 class Post(Base):  # pylint: disable=too-few-public-methods

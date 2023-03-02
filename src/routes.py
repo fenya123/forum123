@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import uuid
 from typing import TYPE_CHECKING
 
 from flask import Blueprint
@@ -10,7 +9,7 @@ from flask import make_response, redirect, render_template, request, url_for
 
 from src.database import session_var
 from src.forms import LoginForm, PostForm, RegistrationForm, TopicForm
-from src.models import Post, Topic, User, UserSession
+from src.models import Topic, User, UserSession
 
 if TYPE_CHECKING:
     from werkzeug.wrappers.response import Response
@@ -47,13 +46,9 @@ def index() -> str:
 @bp.route("/registration", methods=["POST", "GET"])
 def registration() -> str | Response:
     """Handle user's registration form."""
-    session = session_var.get()
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data)
-        user.set_password(form.password.data)
-        session.add(user)
-        session.commit()
+        User.create_user(form.username.data, form.password.data)
         return redirect(url_for("routes.login"))
     return render_template("registration.html", form=form)
 
@@ -66,13 +61,9 @@ def login() -> str | Response:
     if form.validate_on_submit():
         user = session.query(User).filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
-            session_id = str(uuid.uuid4())
-            user_session = UserSession(session_id=session_id, user_id=user.id)
-            session.add(user_session)
-            session.commit()
-
+            user_session = user.create_session()
             response = make_response(redirect(url_for("routes.topics")))
-            response.set_cookie("session_id", session_id)
+            response.set_cookie("session_id", user_session.session_id)
             return response
     return render_template("login.html", form=form)
 
@@ -115,9 +106,7 @@ def create_topic() -> str | Response:
         current_user = session.query(User).filter_by(id=user_session.user_id).one()
         form = TopicForm()
         if form.validate_on_submit():
-            new_topic = Topic(title=form.title.data, description=form.description.data, author_id=current_user.id)
-            session.add(new_topic)
-            session.commit()
+            Topic.create_topic(form.title.data, form.description.data, current_user.id)
             return redirect(url_for("routes.topics"))
         return render_template("topics-create.html", form=form, current_user=current_user)
     return redirect(url_for("routes.login"))
@@ -153,9 +142,7 @@ def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
         if not (topic := session.query(Topic).filter_by(id=topic_id).first()):
             return render_template("404.html", current_user=current_user)
         if topic and form.validate_on_submit():
-            new_post = Post(body=form.body.data, author_id=current_user.id, topic_id=topic.id)
-            session.add(new_post)
-            session.commit()
+            topic.create_post(form.body.data, current_user.id)
             return redirect(url_for("routes.topic_page", topic_id=topic.id))
         return render_template("posts-create.html", form=form, topic=topic, current_user=current_user)
     return redirect(url_for("routes.login"))
