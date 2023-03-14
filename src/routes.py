@@ -31,14 +31,13 @@ def check_unit_tests() -> str:
 @bp.route("/index")
 def index() -> str:
     """Handle index page."""
-    session = session_var.get()
-    users = session.query(User).all()
+    users = User.get_users()
     session_id = request.cookies.get("session_id")
-    user_session = session.query(UserSession).filter_by(session_id=session_id).first()
+    user_session = UserSession.get_user_session_by_session_id(session_id)
 
     current_user = None
     if user_session is not None:
-        current_user = session.query(User).filter_by(id=user_session.user_id).one()
+        current_user = user_session.user
 
     return render_template("index.html", users=users, current_user=current_user)
 
@@ -56,11 +55,10 @@ def registration() -> str | Response:
 @bp.route("/login", methods=["POST", "GET"])
 def login() -> str | Response:
     """Handle user's login form."""
-    session = session_var.get()
     form = LoginForm()
     if form.validate_on_submit():
-        user = session.query(User).filter_by(username=form.username.data).first()
-        if user and user.check_password(form.password.data):
+        user = User.get_user_by_credentials(form.username.data, form.password.data)
+        if user:
             user_session = user.create_session()
             response = make_response(redirect(url_for("routes.topics")))
             response.set_cookie("session_id", user_session.session_id)
@@ -73,7 +71,7 @@ def logout() -> Response:
     """Log out users."""
     session = session_var.get()
     session_id = request.cookies.get("session_id")
-    if session_to_delete := session.query(UserSession).filter_by(session_id=session_id).first():
+    if session_to_delete := UserSession.get_user_session_by_session_id(session_id):
         session.delete(session_to_delete)
         session.commit()
     return redirect(url_for("routes.login"))
@@ -82,14 +80,13 @@ def logout() -> Response:
 @bp.route("/topics")
 def topics() -> str | Response:
     """Handle topics page."""
-    session = session_var.get()
     session_id = request.cookies.get("session_id")
-    user_session = session.query(UserSession).filter_by(session_id=session_id).first()
+    user_session = UserSession.get_user_session_by_session_id(session_id)
 
     current_user = None
     if user_session is not None:
-        current_user = session.query(User).filter_by(id=user_session.user_id).one()
-        topic_list = session.query(Topic).order_by(Topic.created_at.desc()).all()
+        current_user = user_session.user
+        topic_list = Topic.get_topics()
         return render_template("topics.html", topic_list=topic_list, current_user=current_user)
     return redirect(url_for("routes.login"))
 
@@ -97,13 +94,12 @@ def topics() -> str | Response:
 @bp.route("/topics/create", methods=["POST", "GET"])
 def create_topic() -> str | Response:
     """Handle create topic page."""
-    session = session_var.get()
     session_id = request.cookies.get("session_id")
-    user_session = session.query(UserSession).filter_by(session_id=session_id).first()
+    user_session = UserSession.get_user_session_by_session_id(session_id)
 
     current_user = None
     if user_session is not None:
-        current_user = session.query(User).filter_by(id=user_session.user_id).one()
+        current_user = user_session.user
         form = TopicForm()
         if form.validate_on_submit():
             Topic.create_topic(form.title.data, form.description.data, current_user.id)
@@ -115,14 +111,13 @@ def create_topic() -> str | Response:
 @bp.route("/topics/<int:topic_id>")
 def topic_page(topic_id: int) -> str | Response:
     """Handle topic page."""
-    session = session_var.get()
     session_id = request.cookies.get("session_id")
-    user_session = session.query(UserSession).filter_by(session_id=session_id).first()
+    user_session = UserSession.get_user_session_by_session_id(session_id)
 
     current_user = None
     if user_session is not None:
-        current_user = session.query(User).filter_by(id=user_session.user_id).one()
-        if not (topic := session.query(Topic).filter_by(id=topic_id).first()):
+        current_user = user_session.user
+        if not (topic := Topic.get(topic_id)):
             return render_template("404.html", current_user=current_user)
         return render_template("topic.html", current_user=current_user, topic=topic)
     return redirect(url_for("routes.login"))
@@ -131,15 +126,14 @@ def topic_page(topic_id: int) -> str | Response:
 @bp.route("/topics/<int:topic_id>/posts/create", methods=["POST", "GET"])
 def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
     """Handle post creation page."""
-    session = session_var.get()
     session_id = request.cookies.get("session_id")
-    user_session = session.query(UserSession).filter_by(session_id=session_id).first()
+    user_session = UserSession.get_user_session_by_session_id(session_id)
 
     current_user = None
     if user_session is not None:
-        current_user = session.query(User).filter_by(id=user_session.user_id).one()
+        current_user = user_session.user
         form = PostForm()
-        if not (topic := session.query(Topic).filter_by(id=topic_id).first()):
+        if not (topic := Topic.get(topic_id)):
             return render_template("404.html", current_user=current_user)
         if topic and form.validate_on_submit():
             topic.create_post(form.body.data, current_user.id)
