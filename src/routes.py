@@ -74,8 +74,7 @@ def logout() -> Response:
     session = session_var.get()
     session_id = request.cookies.get("session_id")
     if session_to_delete := session.query(UserSession).filter_by(session_id=session_id).first():
-        session.delete(session_to_delete)
-        session.commit()
+        session_to_delete.delete()
     return redirect(url_for("routes.login"))
 
 
