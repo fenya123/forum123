@@ -4,11 +4,15 @@ from __future__ import annotations
 
 import hashlib
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, DateTime, ForeignKey, func, Integer, String
 from sqlalchemy.orm import relationship
 
 from src.database import Base, session_var
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class User(Base):
@@ -16,9 +20,9 @@ class User(Base):
 
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)  # noqa: A003
-    username = Column(String, nullable=False, unique=True)
-    password_hash = Column(String(64), nullable=False)
+    id: int = Column(Integer, primary_key=True)  # noqa: A003
+    username: str = Column(String, nullable=False, unique=True)
+    password_hash: str = Column(String(64), nullable=False)
 
     def _get_password_hash(self, password: str) -> str:  # pylint: disable=no-self-use
         return hashlib.sha256(password.encode()).hexdigest()
@@ -53,9 +57,9 @@ class UserSession(Base):  # pylint: disable=too-few-public-methods
 
     __tablename__ = "user_session"
 
-    id = Column(Integer, primary_key=True)  # noqa: A003
-    session_id = Column(String, nullable=False, unique=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    id: int = Column(Integer, primary_key=True)  # noqa: A003
+    session_id: str = Column(String, nullable=False, unique=True)
+    user_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     def delete(self) -> None:
         """Use this method to delete a user session."""
@@ -69,11 +73,11 @@ class Topic(Base):
 
     __tablename__ = "topics"
 
-    id = Column(Integer, primary_key=True)  # noqa: A003
-    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    created_at = Column(DateTime, server_default=func.now(), nullable=False)
-    description = Column(String(123), nullable=False)
-    title = Column(String(30), nullable=False)
+    id: int = Column(Integer, primary_key=True)  # noqa: A003
+    author_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at: datetime = Column(DateTime, server_default=func.now(), nullable=False)
+    description: str = Column(String(123), nullable=False)
+    title: str = Column(String(30), nullable=False)
     author: User = relationship("User", uselist=False)
     posts: list[Post] = relationship("Post", order_by="Post.created_at")
 
@@ -98,9 +102,9 @@ class Post(Base):  # pylint: disable=too-few-public-methods
 
     __tablename__ = "posts"
 
-    id = Column(Integer, primary_key=True)  # noqa: A003
-    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    created_at = Column(DateTime, server_default=func.now(), nullable=False)
-    body = Column(String(123), nullable=False)
-    topic_id = Column(Integer, ForeignKey("topics.id"), nullable=False)
+    id: int = Column(Integer, primary_key=True)  # noqa: A003
+    author_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at: datetime = Column(DateTime, server_default=func.now(), nullable=False)
+    body: str = Column(String(123), nullable=False)
+    topic_id: int = Column(Integer, ForeignKey("topics.id"), nullable=False)
     author: User = relationship("User", uselist=False)
