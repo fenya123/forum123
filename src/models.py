@@ -51,8 +51,23 @@ class User(Base):
         session.commit()
         return new_session
 
+    @staticmethod
+    def get_users() -> list[User]:
+        """Use this method to get all users from users table."""
+        session = session_var.get()
+        return session.query(User).all()
 
-class UserSession(Base):  # pylint: disable=too-few-public-methods
+    @staticmethod
+    def get_user_by_credentials(username: str, password: str) -> User | None:
+        """Use this method to fetch a user from users table with a specific username and password."""
+        session = session_var.get()
+        user_to_fetch: User | None = session.query(User).filter_by(username=username).first()
+        if user_to_fetch and user_to_fetch.check_password(password):
+            return user_to_fetch
+        return None
+
+
+class UserSession(Base):
     """A model class for user_session table."""
 
     __tablename__ = "user_session"
@@ -60,12 +75,19 @@ class UserSession(Base):  # pylint: disable=too-few-public-methods
     id: int = Column(Integer, primary_key=True)  # noqa: A003
     session_id: str = Column(String, nullable=False, unique=True)
     user_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user: User = relationship("User", uselist=False)
 
     def delete(self) -> None:
         """Use this method to delete a user session."""
         session = session_var.get()
         session.delete(self)
         session.commit()
+
+    @staticmethod
+    def get_user_session_by_session_id(session_id: str) -> UserSession | None:
+        """Use this method to get a user session with a certain id."""
+        session = session_var.get()
+        return session.query(UserSession).filter_by(session_id=session_id).first()
 
 
 class Topic(Base):
@@ -95,6 +117,18 @@ class Topic(Base):
         session = session_var.get()
         session.add(new_post)
         session.commit()
+
+    @staticmethod
+    def get_topics() -> list[Topic]:
+        """Use this method to get all topics from topics table."""
+        session = session_var.get()
+        return session.query(Topic).order_by(Topic.created_at.desc()).all()
+
+    @staticmethod
+    def get(topic_id: int) -> Topic | None:
+        """Use this method to get a topic with a certain id."""
+        session = session_var.get()
+        return session.query(Topic).filter_by(id=topic_id).first()
 
 
 class Post(Base):  # pylint: disable=too-few-public-methods
