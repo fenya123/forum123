@@ -57,6 +57,12 @@ class UserSession(Base):  # pylint: disable=too-few-public-methods
     session_id = Column(String, nullable=False, unique=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
+    def delete(self) -> None:
+        """Use this method to delete a user session."""
+        session = session_var.get()
+        session.delete(self)
+        session.commit()
+
 
 class Topic(Base):
     """A model class for topics table."""
