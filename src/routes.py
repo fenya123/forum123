@@ -86,7 +86,6 @@ def topics() -> str | Response:
     if session_id is not None:
         user_session = UserSession.get_user_session_by_session_id(session_id)
 
-    current_user = None
     if user_session is not None:
         current_user = user_session.user
         topic_list = Topic.get_topics()
@@ -102,15 +101,14 @@ def create_topic() -> str | Response:
     if session_id is not None:
         user_session = UserSession.get_user_session_by_session_id(session_id)
 
-    current_user = None
-    if user_session is not None:
-        current_user = user_session.user
-        form = TopicForm()
-        if form.validate_on_submit():
-            Topic.create_topic(form.title.data, form.description.data, current_user.id)
-            return redirect(url_for("routes.topics"))
+    if user_session is None:
+        return redirect(url_for("routes.login"))
+    current_user = user_session.user
+    form = TopicForm()
+    if not form.validate_on_submit():
         return render_template("topics-create.html", form=form, current_user=current_user)
-    return redirect(url_for("routes.login"))
+    Topic.create_topic(form.title.data, form.description.data, current_user.id)
+    return redirect(url_for("routes.topics"))
 
 
 @bp.route("/topics/<int:topic_id>")
@@ -121,13 +119,12 @@ def topic_page(topic_id: int) -> str | Response:
     if session_id is not None:
         user_session = UserSession.get_user_session_by_session_id(session_id)
 
-    current_user = None
-    if user_session is not None:
-        current_user = user_session.user
-        if not (topic := Topic.get(topic_id)):
-            return render_template("404.html", current_user=current_user)
-        return render_template("topic.html", current_user=current_user, topic=topic)
-    return redirect(url_for("routes.login"))
+    if user_session is None:
+        return redirect(url_for("routes.login"))
+    current_user = user_session.user
+    if not (topic := Topic.get(topic_id)):
+        return render_template("404.html", current_user=current_user)
+    return render_template("topic.html", current_user=current_user, topic=topic)
 
 
 @bp.route("/topics/<int:topic_id>/posts/create", methods=["POST", "GET"])
@@ -138,14 +135,13 @@ def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
     if session_id is not None:
         user_session = UserSession.get_user_session_by_session_id(session_id)
 
-    current_user = None
-    if user_session is not None:
-        current_user = user_session.user
-        form = PostForm()
-        if not (topic := Topic.get(topic_id)):
-            return render_template("404.html", current_user=current_user)
-        if topic and form.validate_on_submit():
-            topic.create_post(form.body.data, current_user.id)
-            return redirect(url_for("routes.topic_page", topic_id=topic.id))
-        return render_template("posts-create.html", form=form, topic=topic, current_user=current_user)
-    return redirect(url_for("routes.login"))
+    if user_session is None:
+        return redirect(url_for("routes.login"))
+    current_user = user_session.user
+    form = PostForm()
+    if not (topic := Topic.get(topic_id)):
+        return render_template("404.html", current_user=current_user)
+    if topic and form.validate_on_submit():
+        topic.create_post(form.body.data, current_user.id)
+        return redirect(url_for("routes.topic_page", topic_id=topic.id))
+    return render_template("posts-create.html", form=form, topic=topic, current_user=current_user)
