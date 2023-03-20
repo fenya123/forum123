@@ -18,6 +18,17 @@ if TYPE_CHECKING:
 bp = Blueprint("routes", __name__)
 
 
+def get_current_user() -> User | None:
+    """Use this function to get current user."""
+    user_session = None
+    if session_id := request.cookies.get("session_id"):
+        user_session = UserSession.get_user_session_by_session_id(session_id)
+
+    if user_session is not None:
+        return user_session.user
+    return None
+
+
 @bp.route("/check-unit-tests", methods=["POST"])
 def check_unit_tests() -> str:
     """Route to check that application works correctly in unit-testing environment."""
@@ -32,14 +43,7 @@ def check_unit_tests() -> str:
 def index() -> str:
     """Handle index page."""
     users = User.get_users()
-    session_id = request.cookies.get("session_id")
-    user_session = None
-    if session_id is not None:
-        user_session = UserSession.get_user_session_by_session_id(session_id)
-
-    current_user = None
-    if user_session is not None:
-        current_user = user_session.user
+    current_user = get_current_user()
 
     return render_template("index.html", users=users, current_user=current_user)
 
@@ -81,13 +85,7 @@ def logout() -> Response:
 @bp.route("/topics")
 def topics() -> str | Response:
     """Handle topics page."""
-    session_id = request.cookies.get("session_id")
-    user_session = None
-    if session_id is not None:
-        user_session = UserSession.get_user_session_by_session_id(session_id)
-
-    if user_session is not None:
-        current_user = user_session.user
+    if (current_user := get_current_user()) is not None:
         topic_list = Topic.get_topics()
         return render_template("topics.html", topic_list=topic_list, current_user=current_user)
     return redirect(url_for("routes.login"))
@@ -96,14 +94,8 @@ def topics() -> str | Response:
 @bp.route("/topics/create", methods=["POST", "GET"])
 def create_topic() -> str | Response:
     """Handle create topic page."""
-    session_id = request.cookies.get("session_id")
-    user_session = None
-    if session_id is not None:
-        user_session = UserSession.get_user_session_by_session_id(session_id)
-
-    if user_session is None:
+    if (current_user := get_current_user()) is None:
         return redirect(url_for("routes.login"))
-    current_user = user_session.user
     form = TopicForm()
     if not form.validate_on_submit():
         return render_template("topics-create.html", form=form, current_user=current_user)
@@ -114,14 +106,8 @@ def create_topic() -> str | Response:
 @bp.route("/topics/<int:topic_id>")
 def topic_page(topic_id: int) -> str | Response:
     """Handle topic page."""
-    session_id = request.cookies.get("session_id")
-    user_session = None
-    if session_id is not None:
-        user_session = UserSession.get_user_session_by_session_id(session_id)
-
-    if user_session is None:
+    if (current_user := get_current_user()) is None:
         return redirect(url_for("routes.login"))
-    current_user = user_session.user
     if not (topic := Topic.get(topic_id)):
         return render_template("404.html", current_user=current_user)
     return render_template("topic.html", current_user=current_user, topic=topic)
@@ -130,14 +116,8 @@ def topic_page(topic_id: int) -> str | Response:
 @bp.route("/topics/<int:topic_id>/posts/create", methods=["POST", "GET"])
 def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
     """Handle post creation page."""
-    session_id = request.cookies.get("session_id")
-    user_session = None
-    if session_id is not None:
-        user_session = UserSession.get_user_session_by_session_id(session_id)
-
-    if user_session is None:
+    if (current_user := get_current_user()) is None:
         return redirect(url_for("routes.login"))
-    current_user = user_session.user
     form = PostForm()
     if not (topic := Topic.get(topic_id)):
         return render_template("404.html", current_user=current_user)
