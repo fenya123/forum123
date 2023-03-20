@@ -121,7 +121,7 @@ def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
     form = PostForm()
     if not (topic := Topic.get(topic_id)):
         return render_template("404.html", current_user=current_user)
-    if topic and form.validate_on_submit():
+    if form.validate_on_submit():
         topic.create_post(form.body.data, current_user.id)
         return redirect(url_for("routes.topic_page", topic_id=topic.id))
     return render_template("posts-create.html", form=form, topic=topic, current_user=current_user)
