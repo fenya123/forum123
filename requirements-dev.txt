@@ -26,7 +26,7 @@ flake8-return==1.1.3  # Plugin that checks return values.
 flake8-rst-docstrings==0.2.3  # Validate Python docstrings as reStructuredText (RST)
 flake8-simplify==0.14.2  # Plugin that helps you to simplify code.
 flake8-spellcheck==0.24.0  # Spellcheck variables, classnames, comments, docstrings etc.
-flake8-type-checking==1.0.3  # Plugin for managing type-checking imports & forward references.
+flake8-type-checking==2.3.1  # Plugin for managing type-checking imports & forward references.
 flake8==3.9.2
 mypy==0.991
 pylint==2.15.9

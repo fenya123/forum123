@@ -7,10 +7,10 @@
       <div>
         forum123
         {% if current_user %}
-          <a href="{{ url_for('routes.logout') }}">Sign Out</a>
+          <a href="{{ url_for('users.logout') }}">Sign Out</a>
         {% else %}
-          <a href="{{ url_for('routes.registration') }}">Sign Up</a>
-          <a href="{{ url_for('routes.login') }}">Sign In</a>
+          <a href="{{ url_for('users.registration') }}">Sign Up</a>
+          <a href="{{ url_for('users.login') }}">Sign In</a>
         {% endif %}
       </div>
       {% block content %}{% endblock %}
