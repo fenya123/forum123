@@ -3,11 +3,12 @@
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from src import routes
+from src import routes, users
 from src.config import Config
 
 app = Flask(__name__)
 app.register_blueprint(routes.bp)
+app.register_blueprint(users.routes.bp)
 app.config.from_object(Config)
 
 
