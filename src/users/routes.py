@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from werkzeug.wrappers.response import Response
 
 
-bp = Blueprint("users", __name__)
+bp = Blueprint("users", __name__, template_folder='templates')
 
 
 @bp.route("/registration", methods=["POST", "GET"])
