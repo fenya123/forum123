@@ -11,7 +11,7 @@ from src.database import Base, session_var
 
 if TYPE_CHECKING:
     from datetime import datetime
-    from src.users.models import User  # noqa: TC004
+    from src.users.models import User
 
 
 class Topic(Base):
