@@ -29,16 +29,6 @@ def check_unit_tests() -> str:
     return render_template("user_created.html")
 
 
-@bp.route("/")
-@bp.route("/index")
-def index() -> str:
-    """Handle index page."""
-    users = User.get_users()
-    current_user = get_current_user()
-
-    return render_template("index.html", users=users, current_user=current_user)
-
-
 @bp.route("/topics/<int:topic_id>/posts/create", methods=["POST", "GET"])
 def create_post(topic_id: int) -> str | Response:  # noqa: CFQ004
     """Handle post creation page."""
