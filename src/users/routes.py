@@ -17,6 +17,17 @@ if TYPE_CHECKING:
 bp = Blueprint("users", __name__, template_folder="templates")
 
 
+def get_current_user() -> User | None:
+    """Use this function to get current user."""
+    user_session = None
+    if session_id := request.cookies.get("session_id"):
+        user_session = UserSession.get_user_session_by_session_id(session_id)
+
+    if user_session is not None:
+        return user_session.user
+    return None
+
+
 @bp.route("/registration", methods=["POST", "GET"])
 def registration() -> str | Response:
     """Handle user's registration form."""
@@ -33,7 +44,7 @@ def login() -> str | Response:
     form = LoginForm()
     if form.validate_on_submit() and (user := User.get_user_by_credentials(form.username.data, form.password.data)):
         user_session = user.create_session()
-        response = make_response(redirect(url_for("routes.topics")))
+        response = make_response(redirect(url_for("topics.topics")))
         response.set_cookie("session_id", user_session.session_id)
         return response
     return render_template("login.html", form=form)
