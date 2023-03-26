@@ -5,29 +5,19 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from flask import Blueprint
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, url_for
 
 from src.database import session_var
 from src.forms import PostForm, TopicForm
 from src.models import Topic
-from src.users.models import User, UserSession
+from src.users.models import User
+from src.users.utils import get_current_user
 
 if TYPE_CHECKING:
     from werkzeug.wrappers.response import Response
 
 
 bp = Blueprint("routes", __name__)
-
-
-def get_current_user() -> User | None:
-    """Use this function to get current user."""
-    user_session = None
-    if session_id := request.cookies.get("session_id"):
-        user_session = UserSession.get_user_session_by_session_id(session_id)
-
-    if user_session is not None:
-        return user_session.user
-    return None
 
 
 @bp.route("/check-unit-tests", methods=["POST"])
