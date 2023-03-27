@@ -33,7 +33,7 @@ def login() -> str | Response:
     form = LoginForm()
     if form.validate_on_submit() and (user := User.get_user_by_credentials(form.username.data, form.password.data)):
         user_session = user.create_session()
-        response = make_response(redirect(url_for("routes.topics")))
+        response = make_response(redirect(url_for("topics.topics")))
         response.set_cookie("session_id", user_session.session_id)
         return response
     return render_template("login.html", form=form)

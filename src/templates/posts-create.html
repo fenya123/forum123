@@ -8,6 +8,6 @@
             {{ form.body.label }}<br>
             {{ form.body(size=123) }}
         </p>
-        <p>{{ form.submit() }}</p><button form="1" type="reset"><a href="{{ url_for('routes.topic_page', topic_id=topic.id) }}">Cancel</a></button>
+        <p>{{ form.submit() }}</p><button form="1" type="reset"><a href="{{ url_for('topics.topic_page', topic_id=topic.id) }}">Cancel</a></button>
     </form>
 {% endblock %}
