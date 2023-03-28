@@ -12,6 +12,6 @@
             {{ form.description.label }}<br>
             {{ form.description(size=120) }}
         </p>
-        <p>{{ form.submit() }}</p><button form="1" type="reset"><a href="{{ url_for('routes.topics') }}">Cancel</a></button>
+        <p>{{ form.submit() }}</p><button form="1" type="reset"><a href="{{ url_for('topics.topics') }}">Cancel</a></button>
     </form>
 {% endblock %}
