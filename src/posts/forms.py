@@ -1,4 +1,4 @@
-"""forum123's forms module."""
+"""Forms module of 'posts' package."""
 
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, TextAreaField

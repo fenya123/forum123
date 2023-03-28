@@ -17,5 +17,5 @@
             <li>at {{ post.created_at }}</li>
         </ul>
     {% endfor %}
-    <a href="{{ url_for('routes.create_post', topic_id=topic.id) }}">Create Post</a>
+    <a href="{{ url_for('posts.create_post', topic_id=topic.id) }}">Create Post</a>
 {% endblock %}

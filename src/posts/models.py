@@ -1,4 +1,4 @@
-"""forum123's database models module."""
+"""Models module of 'posts' package."""
 
 from __future__ import annotations
 
