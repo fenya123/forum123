@@ -4,6 +4,7 @@ from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 import src.index.routes
+import src.posts.routes
 import src.topics.routes
 import src.users.routes
 from src import routes
@@ -14,6 +15,7 @@ app.register_blueprint(routes.bp)
 app.register_blueprint(src.users.routes.bp)
 app.register_blueprint(src.topics.routes.bp)
 app.register_blueprint(src.index.routes.bp)
+app.register_blueprint(src.posts.routes.bp)
 app.config.from_object(Config)
 
 

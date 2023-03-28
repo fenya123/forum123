@@ -8,7 +8,7 @@ from sqlalchemy import Column, DateTime, ForeignKey, func, Integer, String
 from sqlalchemy.orm import relationship
 
 from src.database import Base, session_var
-from src.models import Post
+from src.posts.models import Post
 
 if TYPE_CHECKING:
     from datetime import datetime
