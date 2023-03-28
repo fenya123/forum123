@@ -9,7 +9,9 @@ from src.database import Base
 from src.config import Config
 
 # register app models
-from src import models
+import src.posts.models
+import src.topics.models
+import src.users.models
 
 
 app_config = Config()
