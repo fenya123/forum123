@@ -20,7 +20,8 @@ class User(Base):
     username: str = Column(String, nullable=False, unique=True)
     password_hash: str = Column(String(64), nullable=False)
 
-    def _get_password_hash(self, password: str) -> str:  # pylint: disable=no-self-use
+    @staticmethod
+    def _get_password_hash(password: str) -> str:
         return hashlib.sha256(password.encode()).hexdigest()
 
     def set_password(self, password: str) -> None:
@@ -32,12 +33,13 @@ class User(Base):
         return self._get_password_hash(password_to_check) == self.password_hash
 
     @classmethod
-    def create_user(cls, username: str, password: str) -> None:
+    def create_user(cls, username: str, password: str) -> User:
         """Use this method to create a new user."""
-        new_user = cls(username=username, password_hash=hashlib.sha256(password.encode()).hexdigest())
+        new_user = cls(username=username, password_hash=User._get_password_hash(password=password))
         session = session_var.get()
         session.add(new_user)
         session.commit()
+        return new_user
 
     def create_session(self) -> UserSession:
         """Use this method to create a new session."""

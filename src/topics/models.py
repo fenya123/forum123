@@ -29,19 +29,21 @@ class Topic(Base):
     posts: list[Post] = relationship("Post", order_by="Post.created_at")
 
     @classmethod
-    def create_topic(cls, title: str, description: str, author_id: int) -> None:
+    def create_topic(cls, title: str, description: str, author_id: int) -> Topic:
         """Use this method to create a new topic."""
         new_topic = cls(title=title, description=description, author_id=author_id)
         session = session_var.get()
         session.add(new_topic)
         session.commit()
+        return new_topic
 
-    def create_post(self, body: str, author_id: int) -> None:
+    def create_post(self, body: str, author_id: int) -> Post:
         """Use this method to create a new post."""
         new_post = Post(body=body, author_id=author_id, topic_id=self.id)
         session = session_var.get()
         session.add(new_post)
         session.commit()
+        return new_post
 
     @staticmethod
     def get_topics() -> list[Topic]:
