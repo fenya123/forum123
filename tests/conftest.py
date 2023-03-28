@@ -4,7 +4,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from src import app
 from src.database import engine, session_var
-from src.models import User
 from tests.utils.database import set_autoincrement_counters
 
 
@@ -29,11 +28,3 @@ def db_empty():
     transaction.rollback()
     session.remove()
     connection.close()
-
-
-@pytest.fixture
-def db_with_one_user(db_empty):
-    session = db_empty
-    session.add(User(id=1, username="user from fixture", password_hash="password"))
-    session.commit()
-    return session
