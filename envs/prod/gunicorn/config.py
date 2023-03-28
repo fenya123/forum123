@@ -6,4 +6,4 @@ bind = "0.0.0.0:5000"
 
 errorlog = "-"  # here "-" means stdout
 
-wsgi_app = "src:app"
+wsgi_app = "src.app:app"
