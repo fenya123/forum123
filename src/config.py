@@ -17,6 +17,8 @@ class Config():  # pylint: disable=too-few-public-methods
     PROXIES_X_PREFIX = int(os.environ.get("PROXIES_X_PREFIX", 0))
     PROXIES_X_PROTO = int(os.environ.get("PROXIES_X_PROTO", 0))
 
+    RESTX_ERROR_404_HELP = False
+
     SECRET_KEY = os.environ.get("SECRET_KEY", "bob")
 
     # next will be listed options derived from the options above

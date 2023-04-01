@@ -64,6 +64,13 @@ class User(Base):
             return user_to_fetch
         return None
 
+    @staticmethod
+    def get_user_by_id(user_id: int) -> User | None:
+        """Use this method to fetch a user from users table with a specific id."""
+        session = session_var.get()
+        user_to_fetch: User | None = session.query(User).filter_by(id=user_id).first()
+        return user_to_fetch
+
 
 class UserSession(Base):
     """A model class for user_session table."""
