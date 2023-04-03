@@ -28,6 +28,9 @@ proto
 # linter
 pylint
 
+# flask package
+restx
+
 # sessionmaker
 sessionmaker
 
