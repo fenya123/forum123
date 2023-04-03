@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import Column, DateTime, ForeignKey, func, Integer, String
 from sqlalchemy.orm import relationship
 
-from src.database import Base
+from src.database import Base, session_var
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -25,3 +25,9 @@ class Post(Base):  # pylint: disable=too-few-public-methods
     body: str = Column(String(123), nullable=False)
     topic_id: int = Column(Integer, ForeignKey("topics.id"), nullable=False)
     author: User = relationship("User", uselist=False)
+
+    @staticmethod
+    def get_post_by_id(topic_id: int) -> Post | None:
+        """Use this method to get a post with a certain id."""
+        session = session_var.get()
+        return session.query(Post).filter_by(id=topic_id).first()
