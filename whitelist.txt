@@ -31,6 +31,9 @@ pylint
 # flask package
 restx
 
+# flask restx library
+reqparse
+
 # sessionmaker
 sessionmaker
 
