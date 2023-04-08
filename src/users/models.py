@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import uuid
+from typing import Final
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, desc, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from src.database import Base, session_var
@@ -19,6 +20,9 @@ class User(Base):
     id: int = Column(Integer, primary_key=True)  # noqa: A003
     username: str = Column(String, nullable=False, unique=True)
     password_hash: str = Column(String(64), nullable=False)
+
+    SORTING_FIELDS: Final = ("username", )
+    SORTING_ORDER: Final = ("asc", "desc")
 
     @staticmethod
     def _get_password_hash(password: str) -> str:
@@ -50,10 +54,15 @@ class User(Base):
         return new_session
 
     @staticmethod
-    def get_users() -> list[User]:
+    def get_users(sorting: dict[str, str] | None = None) -> list[User]:  # noqa: CFQ004
         """Use this method to get all users from users table."""
+        sorting = {"field": "id", "order": "asc"} if sorting is None else sorting
         session = session_var.get()
-        return session.query(User).all()
+        if not sorting:
+            return session.query(User).all()
+        if sorting["order"] == "desc":
+            return session.query(User).order_by(desc(sorting["field"])).all()
+        return session.query(User).order_by(sorting["field"]).all()
 
     @staticmethod
     def get_user_by_credentials(username: str, password: str) -> User | None:
