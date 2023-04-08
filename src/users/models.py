@@ -58,8 +58,6 @@ class User(Base):
         """Use this method to get all users from users table."""
         sorting = {"field": "id", "order": "asc"} if sorting is None else sorting
         session = session_var.get()
-        if not sorting:
-            return session.query(User).all()
         if sorting["order"] == "desc":
             return session.query(User).order_by(desc(sorting["field"])).all()
         return session.query(User).order_by(sorting["field"]).all()

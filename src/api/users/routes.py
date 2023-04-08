@@ -23,8 +23,7 @@ class UserList(Resource):  # type: ignore
         """Get a list of all users, sorted if needed."""
         parser.add_argument("order_by", type=parse_order_by, help="get a sorted list of users")
         sorting_parameters = parser.parse_args()
-        if not (users := User.get_users(sorting_parameters["order_by"])):
-            return []
+        users = User.get_users(sorting_parameters["order_by"])
         return [{"id": user.id, "username": user.username} for user in users]
 
 
