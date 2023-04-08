@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import Final, TYPE_CHECKING
 
-from sqlalchemy import Column, DateTime, ForeignKey, func, Integer, String
+from sqlalchemy import Column, DateTime, desc, ForeignKey, func, Integer, String
 from sqlalchemy.orm import relationship
 
 from src.database import Base, session_var
@@ -28,6 +28,9 @@ class Topic(Base):
     author: User = relationship("User", uselist=False)
     posts: list[Post] = relationship("Post", order_by="Post.created_at")
 
+    SORTING_FIELDS: Final = ("created_at", "title")
+    SORTING_ORDER: Final = ("asc", "desc")
+
     @classmethod
     def create_topic(cls, title: str, description: str, author_id: int) -> Topic:
         """Use this method to create a new topic."""
@@ -46,10 +49,13 @@ class Topic(Base):
         return new_post
 
     @staticmethod
-    def get_topics() -> list[Topic]:
+    def get_topics(sorting: dict[str, str] | None = None) -> list[Topic]:
         """Use this method to get all topics from topics table."""
+        sorting = {"field": "created_at", "order": "asc"} if sorting is None else sorting
         session = session_var.get()
-        return session.query(Topic).order_by(Topic.created_at.desc()).all()
+        if sorting["order"] == "desc":
+            return session.query(Topic).order_by(desc(sorting["field"])).all()
+        return session.query(Topic).order_by(sorting["field"]).all()
 
     @staticmethod
     def get(topic_id: int) -> Topic | None:
