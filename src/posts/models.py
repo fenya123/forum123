@@ -27,7 +27,7 @@ class Post(Base):  # pylint: disable=too-few-public-methods
     author: User = relationship("User", uselist=False)
 
     @staticmethod
-    def get_post_by_id(topic_id: int) -> Post | None:
+    def get_post_by_id(post_id: int) -> Post | None:
         """Use this method to get a post with a certain id."""
         session = session_var.get()
-        return session.query(Post).filter_by(id=topic_id).first()
+        return session.query(Post).filter_by(id=post_id).first()
