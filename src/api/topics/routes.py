@@ -5,6 +5,7 @@ from typing import Any
 from flask import abort
 from flask_restx import Namespace, reqparse, Resource
 
+from src.api.auth.utils import authorized_access
 from src.api.topics.utils import parse_order_by
 from src.topics.models import Topic
 
@@ -19,6 +20,7 @@ class TopicList(Resource):  # type: ignore
     """Get a sorted list of all topics."""
 
     @staticmethod
+    @authorized_access
     def get() -> list[dict[str, Any]] | None:
         """Get a sorted list of all topics."""
         parser.add_argument("order_by", type=parse_order_by, help="get a sorted list of topics")
@@ -38,6 +40,7 @@ class TopicInfo(Resource):  # type: ignore
     """Get a topic's information.."""
 
     @staticmethod
+    @authorized_access
     def get(topic_id: int) -> dict[str, Any] | None:
         """Get a topic's information."""
         if not (topic := Topic.get(topic_id)):
