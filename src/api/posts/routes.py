@@ -5,6 +5,7 @@ from typing import Any
 from flask import abort
 from flask_restx import Namespace, reqparse, Resource
 
+from src.api.auth.utils import authorized_access
 from src.api.posts.utils import parse_order_by
 from src.api.topics.routes import ns as topics_ns
 from src.posts.models import Post
@@ -21,6 +22,7 @@ class PostsList(Resource):  # type: ignore
     """Get a list of posts of a certain topic."""
 
     @staticmethod
+    @authorized_access
     def get(topic_id: int) -> list[dict[str, Any]] | None:
         """Get a list of posts of a certain topic."""
         parser.add_argument("order_by", type=parse_order_by, help="get a list of posts of a topic")
@@ -42,6 +44,7 @@ class PostInfo(Resource):  # type: ignore
     """Get a post's information."""
 
     @staticmethod
+    @authorized_access
     def get(post_id: int) -> dict[str, Any] | None:
         """Get a post's information."""
         if not (post := Post.get_post_by_id(post_id)):

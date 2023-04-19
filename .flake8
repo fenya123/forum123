@@ -18,6 +18,7 @@ enable-extensions =
 ignore =
     ANN101,  # Missing type annotation for self in method
     ANN102,  # Missing type annotation for cls in class method
+    CFQ004,  # Exceeding maximum allowed amount of returns (3)
     E902,  # TokenError: EOF in multi-line statement
     S101,  # Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
     W503,  # Line break occurred before a binary operator.

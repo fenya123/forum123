@@ -5,6 +5,7 @@ from typing import Any
 from flask import abort
 from flask_restx import Namespace, reqparse, Resource
 
+from src.api.auth.utils import authorized_access
 from src.api.users.utils import parse_order_by
 from src.users.models import User
 
@@ -19,6 +20,7 @@ class UserList(Resource):  # type: ignore
     """Get a list of all users, sorted if needed."""
 
     @staticmethod
+    @authorized_access
     def get() -> list[dict[str, Any]] | None:
         """Get a list of all users, sorted if needed."""
         parser.add_argument("order_by", type=parse_order_by, help="get a sorted list of users")
@@ -32,6 +34,7 @@ class UserInfo(Resource):  # type: ignore
     """Get user's id and name."""
 
     @staticmethod
+    @authorized_access
     def get(user_id: int) -> dict[str, Any] | None:
         """Get user's id and name."""
         if not (user := User.get_user_by_id(user_id)):
