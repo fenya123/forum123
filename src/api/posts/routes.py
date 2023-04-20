@@ -22,7 +22,7 @@ class PostsList(Resource):  # type: ignore
     """Get a list of posts of a certain topic."""
 
     @staticmethod
-    @authorized_access(provide_user=True)
+    @authorized_access()
     def get(topic_id: int) -> list[dict[str, Any]] | None:
         """Get a list of posts of a certain topic."""
         parser.add_argument("order_by", type=parse_order_by, help="get a list of posts of a topic")

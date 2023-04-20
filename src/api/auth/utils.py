@@ -26,7 +26,7 @@ parser = reqparse.RequestParser()
 
 def parse_token_data(header: str) -> dict[str, int]:
     """Parse and validate JWT authorization token from Authorization request header."""
-    scheme, token = header.split(" ")
+    scheme, _, token = header.partition(" ")
     if scheme != "Bearer" or token == "":  # pylint: disable=compare-to-empty-string
         return abort(401, "invalid token")
     try:
