@@ -19,6 +19,9 @@ nullable
 # `ORM` stands for Object-Relational Mapping
 orm
 
+# parameter (added due to by ParamSpec in `typing` python)
+param
+
 # a part of PostgreSQL name
 Postgre
 
