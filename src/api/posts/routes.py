@@ -1,6 +1,8 @@
 """posts endpoint module."""
 
-from typing import Any
+from __future__ import annotations
+
+from typing import Any, TYPE_CHECKING
 
 from flask import abort
 from flask_restx import Namespace, reqparse, Resource
@@ -11,6 +13,9 @@ from src.api.topics.routes import ns as topics_ns
 from src.posts.models import Post
 from src.topics.models import Topic
 
+if TYPE_CHECKING:
+    from src.users.models import User
+
 
 ns = Namespace("posts", path="/posts")
 
@@ -19,7 +24,7 @@ parser = reqparse.RequestParser()
 
 @topics_ns.route("/<int:topic_id>/posts")
 class PostsList(Resource):  # type: ignore
-    """Get a list of posts of a certain topic."""
+    """Work with posts."""
 
     @staticmethod
     @authorized_access()
@@ -37,6 +42,23 @@ class PostsList(Resource):  # type: ignore
             "body": post.body,
             "topic_id": post.topic_id,
         } for post in posts]
+
+    @staticmethod
+    @authorized_access(provide_user=True)
+    def post(topic_id: int, user: User) -> dict[str, Any]:
+        """Create a new post."""
+        parser.add_argument("body", required=True)
+        post_info = parser.parse_args()
+        if not (topic := Topic.get(topic_id)):
+            return abort(404, "topic does not exist")
+        created_post = topic.create_post(body=post_info["body"], author_id=user.id)
+        return {
+            "id": created_post.id,
+            "author_id": created_post.author_id,
+            "body": created_post.body,
+            "created_at": str(created_post.created_at),
+            "topic_id": created_post.topic_id,
+        }
 
 
 @ns.route("/<int:post_id>")
