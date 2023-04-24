@@ -49,13 +49,23 @@ class Topic(Base):
         return new_post
 
     @staticmethod
-    def get_topics(sorting: dict[str, str] | None = None) -> list[Topic]:
+    def get_topics(sorting: dict[str, str] | None = None,
+                   author_ids: list[int] | None = None,
+                   created_before: datetime | None = None,
+                   created_after: datetime | None = None) -> list[Topic]:
         """Use this method to get all topics from topics table."""
         sorting = {"field": "created_at", "order": "asc"} if sorting is None else sorting
         session = session_var.get()
+        topics_query = session.query(Topic)
+        if author_ids:
+            topics_query = topics_query.filter(Topic.author_id.in_(author_ids))
+        if created_after:
+            topics_query = topics_query.filter(Topic.created_at > created_after)
+        if created_before:
+            topics_query = topics_query.filter(Topic.created_at < created_before)
         if sorting["order"] == "desc":
-            return session.query(Topic).order_by(desc(sorting["field"])).all()
-        return session.query(Topic).order_by(sorting["field"]).all()
+            return topics_query.order_by(desc(sorting["field"])).all()
+        return topics_query.order_by(sorting["field"]).all()
 
     @staticmethod
     def get(topic_id: int) -> Topic | None:
