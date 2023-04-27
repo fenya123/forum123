@@ -8,7 +8,7 @@ from flask import abort
 from flask_restx import Namespace, reqparse, Resource
 
 from src.api.auth.utils import authorized_access
-from src.api.topics.utils import parse_order_by
+from src.api.topics.utils import parse_author_id, parse_datetime, parse_order_by
 from src.topics.models import Topic
 
 if TYPE_CHECKING:
@@ -27,9 +27,17 @@ class TopicList(Resource):  # type: ignore
     @authorized_access()
     def get() -> list[dict[str, Any]] | None:
         """Get a sorted list of all topics."""
-        parser.add_argument("order_by", type=parse_order_by, help="get a sorted list of topics")
-        sorting_parameters = parser.parse_args()
-        topics = Topic.get_topics(sorting_parameters["order_by"])
+        parser.add_argument("order_by", type=parse_order_by)
+        parser.add_argument("author_id", type=parse_author_id, action="append")
+        parser.add_argument("created_after", type=parse_datetime)
+        parser.add_argument("created_before", type=parse_datetime)
+        parsed_args = parser.parse_args()
+        topics = Topic.get_topics(
+            sorting=parsed_args.get("order_by"),
+            author_ids=parsed_args.get("author_ids"),
+            created_before=parsed_args.get("created_before"),
+            created_after=parsed_args.get("created_after"),
+        )
         return [{
             "id": topic.id,
             "author_id": topic.author_id,
