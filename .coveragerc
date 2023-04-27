@@ -1,6 +1,32 @@
 [run]
 branch = True
 
+source =
+    src
+
+omit =
+    # the files listed below contains code related to ssr
+    # we don't want to cover this code by unit-tests
+    # we want to cover only REST API related code
+    # that's why these files are excluded
+    # If you want to exclude some files for another reason
+    # please do it above
+    src/index/__init__.py,
+    src/index/routes.py,
+
+    src/posts/__init__.py,
+    src/posts/forms.py,
+    src/posts/routes.py,
+
+    src/topics/__init__.py,
+    src/topics/forms.py,
+    src/topics/routes.py,
+
+    src/users/__init__.py,
+    src/users/forms.py,
+    src/users/routes.py,
+
+
 [report]
 exclude_lines =
     pragma: no cover
