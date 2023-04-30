@@ -2,7 +2,7 @@ import pytest
 from alembic.config import main as alembic
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from src import app
+from src.app import app
 from src.database import engine, session_var
 from tests.utils.database import set_autoincrement_counters
 
