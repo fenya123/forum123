@@ -24,6 +24,7 @@ load-plugins=
     pylint.extensions.set_membership,  # Membership tests are more efficient when performed on a lookup optimized datatype like sets.
     pylint.extensions.typing,  # Find issue specifically related to type annotations
     pylint.extensions.while_used,  # While loops can often be rewritten as bounded for loops.
+    pylint_per_file_ignores,  # Adds 'per-file-ignores' section for pylint config
 
 
 [BASIC]

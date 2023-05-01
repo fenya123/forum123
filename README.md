@@ -36,7 +36,7 @@ There are other ways to do it correctly - choose any of these or find your own:
 2. Activate python virtual environment.
 3. Run `mypy`
 4. Run `flake8`
-5. Run `pylint src`
+5. Run `pylint src tests`
 
 Linters order above is the preffered way to run and fix them one by one.
 
