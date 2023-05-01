@@ -55,8 +55,8 @@ Linters order above is the preffered way to run and fix them one by one.
 
 1. Open terminal
 2. Run services using `docker-compose -f envs/test/docker-compose.yml up --detach` command.
-3. Type `POSTGRES_PORT=5433 pytest` command in terminal.
-   If you want to check coverage, run `POSTGRES_PORT=5433 pytest --cov=src`. This command also creates `htmlcov/index.html` file,
+3. Type `pytest` command in terminal.
+   If you want to check coverage, run `pytest --cov=src`. This command also creates `htmlcov/index.html` file,
 
 
 ### Working with migrations
