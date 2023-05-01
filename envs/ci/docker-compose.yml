@@ -24,4 +24,4 @@ services:
 
   forum123-pylint:
     <<: *forum123-build
-    entrypoint: pylint --jobs=0 src
+    entrypoint: pylint --jobs=0 src tests
