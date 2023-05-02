@@ -7,7 +7,7 @@ class Config():  # pylint: disable=too-few-public-methods
     """Configuration class."""
 
     POSTGRES_DB = os.environ.get("POSTGRES_DB", "postgres")
-    POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "127.0.0.1")
+    POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
     POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "")
     POSTGRES_PORT = os.environ.get("POSTGRES_PORT", "5432")
     POSTGRES_USER = os.environ.get("POSTGRES_USER", "postgres")
