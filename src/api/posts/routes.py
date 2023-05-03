@@ -8,7 +8,7 @@ from flask import abort
 from flask_restx import Namespace, reqparse, Resource
 
 from src.api.auth.utils import authorized_access
-from src.api.posts.utils import parse_order_by
+from src.api.posts.utils import parse_author_id, parse_datetime, parse_order_by
 from src.api.topics.routes import ns as topics_ns
 from src.posts.models import Post
 from src.topics.models import Topic
@@ -30,11 +30,20 @@ class PostsList(Resource):  # type: ignore
     @authorized_access()
     def get(topic_id: int) -> list[dict[str, Any]] | None:
         """Get a list of posts of a certain topic."""
-        parser.add_argument("order_by", type=parse_order_by, help="get a list of posts of a topic")
-        sorting_parameters = parser.parse_args()
+        parser.add_argument("order_by", type=parse_order_by)  # pylint: disable=duplicate-code
+        parser.add_argument("author_id", type=parse_author_id, action="append")
+        parser.add_argument("created_after", type=parse_datetime)
+        parser.add_argument("created_before", type=parse_datetime)
+        parsed_args = parser.parse_args()
         if not Topic.get(topic_id):
             return abort(404, "topic does not exist")
-        posts = Post.get_posts_list(topic_id, sorting_parameters["order_by"])
+        posts = Post.get_posts_list(
+            topic_id,
+            sorting=parsed_args.get("order_by"),  # pylint: disable=duplicate-code
+            author_ids=parsed_args.get("author_id"),
+            created_before=parsed_args.get("created_before"),
+            created_after=parsed_args.get("created_after"),
+        )
         return [{
             "id": post.id,
             "author_id": post.author_id,

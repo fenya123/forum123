@@ -22,7 +22,7 @@ def parse_order_by(value: str) -> dict[str, str] | None:  # pylint: disable=dupl
     return {"field": parameter, "order": order}
 
 
-def parse_author_id(value: str) -> int | None:
+def parse_author_id(value: str) -> int | None:  # pylint: disable=duplicate-code
     """Parse author_id query parameter."""
     if not value:
         return abort(400, "empty argument value is not allowed")
@@ -33,7 +33,7 @@ def parse_author_id(value: str) -> int | None:
     return int(value)
 
 
-def parse_datetime(value: str) -> datetime | None:
+def parse_datetime(value: str) -> datetime | None:  # pylint: disable=duplicate-code
     """Parse dates as strings and return datetime objects."""
     if not value:
         return abort(400, "empty argument value is not allowed")
