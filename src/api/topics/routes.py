@@ -34,7 +34,7 @@ class TopicList(Resource):  # type: ignore
         parsed_args = parser.parse_args()
         topics = Topic.get_topics(
             sorting=parsed_args.get("order_by"),
-            author_ids=parsed_args.get("author_ids"),
+            author_ids=parsed_args.get("author_id"),
             created_before=parsed_args.get("created_before"),
             created_after=parsed_args.get("created_after"),
         )
