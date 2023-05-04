@@ -3,10 +3,11 @@
 from typing import Any
 
 from flask import abort
-from flask_restx import Namespace, reqparse, Resource
+from flask_restx import Namespace, Resource
 
 from src.api.auth.utils import authorized_access
 from src.api.users.utils import parse_order_by
+from src.shared import reqparse
 from src.users.models import User
 
 

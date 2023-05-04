@@ -7,10 +7,10 @@ from typing import Any, ParamSpec, TYPE_CHECKING, TypeVar
 
 import jwt
 from flask import abort
-from flask_restx import reqparse
 from jwt import InvalidTokenError
 
 from src.config import Config
+from src.shared import reqparse
 from src.users.models import User
 
 if TYPE_CHECKING:

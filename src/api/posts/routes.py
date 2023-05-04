@@ -5,12 +5,13 @@ from __future__ import annotations
 from typing import Any, TYPE_CHECKING
 
 from flask import abort
-from flask_restx import Namespace, reqparse, Resource
+from flask_restx import Namespace, Resource
 
 from src.api.auth.utils import authorized_access
 from src.api.posts.utils import parse_author_id, parse_datetime, parse_order_by
 from src.api.topics.routes import ns as topics_ns
 from src.posts.models import Post
+from src.shared import reqparse
 from src.topics.models import Topic
 
 if TYPE_CHECKING:

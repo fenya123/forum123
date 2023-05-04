@@ -2,9 +2,10 @@
 
 import jwt
 from flask import abort
-from flask_restx import Namespace, reqparse, Resource
+from flask_restx import Namespace, Resource
 
 from src.config import Config
+from src.shared import reqparse
 from src.users.models import User
 
 
