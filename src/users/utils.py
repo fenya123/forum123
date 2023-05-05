@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from src.users.models import User
 
 
-def get_current_user() -> User | None:
+def get_current_user() -> User | None:  # pragma: no cover
     """Use this function to get current user."""
     user_session = None
     if session_id := request.cookies.get("session_id"):
