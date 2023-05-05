@@ -33,7 +33,7 @@ jobs:
         env:
           GITHUB_EVENT_REF: ${{ github.event.ref }}  # we use `github.event.ref` here because `vars.GITHUB_REF_NAME`
                                                      # for deleted branch will point to default branch
-          GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python envs/ci/scripts/github/cleanup_runs_for_deleted_branch.py
 
@@ -60,7 +60,7 @@ jobs:
 
       - name: Clean up workflow runs for current branch after rebase
         env:
-          GITHUB_REF_NAME: ${{ vars.GITHUB_REF_NAME }}
-          GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python envs/ci/scripts/github/cleanup_runs_for_rebased_branch.py
