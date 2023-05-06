@@ -7,6 +7,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from src.app import app
 from src.database import engine, session_var
+from src.posts.models import Post
 from src.topics.models import Topic
 from src.users.models import User
 from tests.utils.database import set_autoincrement_counters
@@ -90,4 +91,45 @@ def db_with_three_users_and_three_topics(db_with_three_users):
     session.add(topic_three)
 
     session.commit()
+    return session
+
+
+@pytest.fixture
+def db_with_one_of_user_topic_post(db_with_one_user_and_one_topic):
+    session = db_with_one_user_and_one_topic
+    creation_time = "2023-05-06 00:12:38.078953"
+
+    post = Post(id=1, author_id=1, body="test body", topic_id=1,
+                created_at=datetime.datetime.strptime(creation_time, "%Y-%m-%d %H:%M:%S.%f"))
+
+    session.add(post)
+    session.commit()
+
+    return session
+
+
+@pytest.fixture
+def db_with_three_users_one_topic_three_posts(db_with_three_users):
+    session = db_with_three_users
+    creation_time = "2023-05-06 00:12:38.078953"
+
+    topic = Topic(id=1, title="test title", description="test desc", author_id=1,
+                  created_at=datetime.datetime.strptime(creation_time, "%Y-%m-%d %H:%M:%S.%f"))
+    session.add(topic)
+
+    post_one = Post(id=1, author_id=1, body="test body", topic_id=1,
+                    created_at=datetime.datetime.strptime(creation_time, "%Y-%m-%d %H:%M:%S.%f"))
+    session.add(post_one)
+
+    post_two = Post(id=2, author_id=2, body="test body2", topic_id=1)
+    post_two.created_at = datetime.datetime.strptime(creation_time,
+                                                     "%Y-%m-%d %H:%M:%S.%f") + datetime.timedelta(days=1)
+    session.add(post_two)
+
+    post_three = Post(id=3, author_id=3, body="test body3", topic_id=1)
+    post_three.created_at = datetime.datetime.strptime(creation_time,
+                                                       "%Y-%m-%d %H:%M:%S.%f") + datetime.timedelta(days=2)
+    session.add(post_three)
+    session.commit()
+
     return session
