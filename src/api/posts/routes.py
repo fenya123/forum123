@@ -82,7 +82,8 @@ class PostInfo(Resource):  # type: ignore
         if not (post := Post.get_post_by_id(post_id)):
             return abort(404, "Could not find a post with id provided.")
         return {
-            "author_id": post.id,
+            "id": post.id,
+            "author_id": post.author_id,
             "created_at": str(post.created_at),
             "body": post.body,
             "topic_id": post.topic_id,
