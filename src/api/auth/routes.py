@@ -11,8 +11,6 @@ from src.users.models import User
 
 ns = Namespace("auth", path="/auth")
 
-parser = reqparse.RequestParser()
-
 
 @ns.route("")
 class AuthEndpoint(Resource):  # type: ignore
@@ -21,6 +19,7 @@ class AuthEndpoint(Resource):  # type: ignore
     @staticmethod
     def post() -> str | None:
         """Authenticate credentials and return JWT token."""
+        parser = reqparse.RequestParser()
         parser.add_argument("username", required=True, type=str)
         parser.add_argument("password", required=True, type=str)
         credentials = parser.parse_args()

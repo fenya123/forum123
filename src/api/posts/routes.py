@@ -20,8 +20,6 @@ if TYPE_CHECKING:
 
 ns = Namespace("posts", path="/posts")
 
-parser = reqparse.RequestParser()
-
 
 @topics_ns.route("/<int:topic_id>/posts")
 class PostsList(Resource):  # type: ignore
@@ -31,6 +29,7 @@ class PostsList(Resource):  # type: ignore
     @authorized_access()
     def get(topic_id: int) -> list[dict[str, Any]] | None:
         """Get a list of posts of a certain topic."""
+        parser = reqparse.RequestParser()
         parser.add_argument("order_by", type=parse_order_by)  # pylint: disable=duplicate-code
         parser.add_argument("author_id", type=parse_author_id, action="append")
         parser.add_argument("created_after", type=parse_datetime)
@@ -57,6 +56,7 @@ class PostsList(Resource):  # type: ignore
     @authorized_access(provide_user=True)
     def post(topic_id: int, user: User) -> dict[str, Any]:
         """Create a new post."""
+        parser = reqparse.RequestParser()
         parser.add_argument("body", required=True)
         post_info = parser.parse_args()
         if not (topic := Topic.get(topic_id)):

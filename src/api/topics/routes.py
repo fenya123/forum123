@@ -17,8 +17,6 @@ if TYPE_CHECKING:
 
 ns = Namespace("topics", path="/topics")
 
-parser = reqparse.RequestParser()
-
 
 @ns.route("")
 class TopicList(Resource):  # type: ignore
@@ -28,6 +26,7 @@ class TopicList(Resource):  # type: ignore
     @authorized_access()
     def get() -> list[dict[str, Any]] | None:
         """Get a sorted list of all topics."""
+        parser = reqparse.RequestParser()
         parser.add_argument("order_by", type=parse_order_by)
         parser.add_argument("author_id", type=parse_author_id, action="append")
         parser.add_argument("created_after", type=parse_datetime)
@@ -51,6 +50,7 @@ class TopicList(Resource):  # type: ignore
     @authorized_access(provide_user=True)
     def post(user: User) -> dict[str, Any]:
         """Create topic and return its' info."""
+        parser = reqparse.RequestParser()
         parser.add_argument("title", required=True)
         parser.add_argument("description", required=True)
         topic_info = parser.parse_args()
