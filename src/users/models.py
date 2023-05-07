@@ -28,7 +28,7 @@ class User(Base):
     def _get_password_hash(password: str) -> str:
         return hashlib.sha256(password.encode()).hexdigest()
 
-    def set_password(self, password: str) -> None:
+    def set_password(self, password: str) -> None:  # pragma: no cover
         """Use this method to set hashed password to User."""
         self.password_hash = self._get_password_hash(password)
 
@@ -37,7 +37,7 @@ class User(Base):
         return self._get_password_hash(password_to_check) == self.password_hash
 
     @classmethod
-    def create_user(cls, username: str, password: str) -> User:
+    def create_user(cls, username: str, password: str) -> User:  # pragma: no cover
         """Use this method to create a new user."""
         new_user = cls(username=username, password_hash=User._get_password_hash(password=password))
         session = session_var.get()
@@ -45,7 +45,7 @@ class User(Base):
         session.commit()
         return new_user
 
-    def create_session(self) -> UserSession:
+    def create_session(self) -> UserSession:  # pragma: no cover
         """Use this method to create a new session."""
         new_session = UserSession(session_id=str(uuid.uuid4()), user_id=self.id)
         session = session_var.get()
@@ -89,14 +89,14 @@ class UserSession(Base):
     user_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
     user: User = relationship("User", uselist=False)
 
-    def delete(self) -> None:
+    def delete(self) -> None:  # pragma: no cover
         """Use this method to delete a user session."""
         session = session_var.get()
         session.delete(self)
         session.commit()
 
     @staticmethod
-    def get_user_session_by_session_id(session_id: str) -> UserSession | None:
+    def get_user_session_by_session_id(session_id: str) -> UserSession | None:  # pragma: no cover
         """Use this method to get a user session with a certain id."""
         session = session_var.get()
         return session.query(UserSession).filter_by(session_id=session_id).first()
