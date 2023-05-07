@@ -259,3 +259,29 @@ def test_post_topic_list_endpoint_with_empty_args_returns_400_with_correct_body(
 
     assert result.status_code == 400
     assert result.json == {"message": "invalid request"}
+
+
+def test_get_topic_list_endpoint_with_no_bearer_prefix_returns_401_with_correct_body(client, db_with_one_user):
+    authorization_token = jwt.encode({"user_id": 1}, Config.SECRET_KEY, algorithm="HS256")
+
+    result = client.get("api/topics", headers={"Authorization": f"InvalidBearerPrefix {authorization_token}"})
+
+    assert result.status_code == 401
+    assert result.json == {"message": "invalid token"}
+
+
+def test_get_topic_list_endpoint_with_empty_auth_token_returns_401_with_correct_body(client, db_with_one_user):
+
+    result = client.get("api/topics", headers={"Authorization": "Bearer"})
+
+    assert result.status_code == 401
+    assert result.json == {"message": "invalid token"}
+
+
+def test_get_topic_list_endpoint_with_nonexistent_user_auth_returns_401_with_correct_body(client, db_with_one_user):
+    authorization_token = jwt.encode({"user_id": 0}, Config.SECRET_KEY, algorithm="HS256")
+
+    result = client.get("api/topics", headers={"Authorization": f"Bearer {authorization_token}"})
+
+    assert result.status_code == 403
+    assert result.json == {"message": "user not found"}
