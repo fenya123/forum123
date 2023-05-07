@@ -13,8 +13,6 @@ from src.users.models import User
 
 ns = Namespace("users", path="/users")
 
-parser = reqparse.RequestParser()
-
 
 @ns.route("")
 class UserList(Resource):  # type: ignore
@@ -24,6 +22,7 @@ class UserList(Resource):  # type: ignore
     @authorized_access()
     def get() -> list[dict[str, Any]] | None:
         """Get a list of all users, sorted if needed."""
+        parser = reqparse.RequestParser()
         parser.add_argument("order_by", type=parse_order_by, help="get a sorted list of users")
         sorting_parameters = parser.parse_args()
         users = User.get_users(sorting_parameters["order_by"])
